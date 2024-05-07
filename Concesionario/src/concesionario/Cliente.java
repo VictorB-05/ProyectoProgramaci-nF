@@ -2,15 +2,18 @@ package concesionario;
 
 import java.time.LocalDateTime;
 
-public class Cliente extends Persona {
-	private Banco datosBan;
+public class Cliente extends Persona implements ICliente{
+	private Cuenta_Bancaria datosBan;
 	private LocalDateTime fAlta;
 	private Boolean mayorEdad;
 	private Cliente representante;
-
+	
+	/**
+	 * Constructor de aquellos clientes sin representante
+	 **/
 	public Cliente(String nombre, String apellidos, String dni, LocalDateTime fechaNac, int edad, char sexo,
 			String direccion, String localidad, String provincia, int codPostal, String telefono, String correoElec,
-			Banco datosBan) {
+			Cuenta_Bancaria datosBan) {
 		super(correoElec, correoElec, correoElec, fechaNac, codPostal, sexo, correoElec, correoElec, correoElec,
 				codPostal, correoElec, correoElec);
 		this.datosBan = datosBan;
@@ -19,7 +22,7 @@ public class Cliente extends Persona {
 
 	public Cliente(String nombre, String apellidos, String dni, LocalDateTime fechaNac, int edad, char sexo,
 			String direccion, String localidad, String provincia, int codPostal, String telefono, String correoElec,
-			Banco datosBan, Cliente representante) {
+			Cuenta_Bancaria datosBan, Cliente representante) {
 		super(correoElec, correoElec, correoElec, fechaNac, codPostal, sexo, correoElec, correoElec, correoElec,
 				codPostal, correoElec, correoElec);
 		this.datosBan = datosBan;
@@ -27,11 +30,11 @@ public class Cliente extends Persona {
 		fAlta = LocalDateTime.now();
 	}
 
-	public Banco getDatosBan() {
+	public Cuenta_Bancaria getDatosBan() {
 		return datosBan;
 	}
 
-	public void setDatosBan(Banco datosBan) {
+	public void setDatosBan(Cuenta_Bancaria datosBan) {
 		this.datosBan = datosBan;
 	}
 

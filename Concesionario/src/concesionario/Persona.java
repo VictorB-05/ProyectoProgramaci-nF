@@ -2,7 +2,7 @@ package concesionario;
 
 import java.time.LocalDateTime;
 
-public class Persona {
+public class Persona implements IPersona{
 	private String nombre;
 	private String apellidos;
 	private String dni;

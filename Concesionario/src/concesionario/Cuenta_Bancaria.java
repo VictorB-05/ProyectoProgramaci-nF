@@ -1,6 +1,7 @@
 package concesionario;
 
-public class Banco {
+
+public class Cuenta_Bancaria {
 	private String nombre;
 	private String apellidos;
 	private String dni;
@@ -8,7 +9,7 @@ public class Banco {
 	private int cuentaCorre;
 	private String provincia;
 	
-	public Banco(String nombre, String apellidos, String dni, String banco, int cuentaCorre, String provincia) {
+	public Cuenta_Bancaria(String nombre, String apellidos, String dni, String banco, int cuentaCorre, String provincia) {
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.dni = dni;

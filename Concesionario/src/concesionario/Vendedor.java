@@ -2,7 +2,7 @@ package concesionario;
 
 import java.time.LocalDateTime;
 
-public class Vendedor extends Persona{
+public class Vendedor extends Persona implements IVendedor{
 	private String caEmpresa;
 	private String departamento;
 	private int sueldo;
