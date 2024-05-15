@@ -1,6 +1,6 @@
 package concesionario;
 
-public class GestionVendedores {
+public class Gestion_Vendedores {
 	
 	public static void menu() {
 		

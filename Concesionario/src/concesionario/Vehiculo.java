@@ -15,12 +15,12 @@ public class Vehiculo implements IVehiculo{
     private int numPuertas;
     private double consumo;
     private LocalDate fechaMatricula;
-    private String nIVE;
-    private String etiquetaEco;
+    private String nive;
+    private EtiquetaEco etiquetaEco;
     
 	public Vehiculo(String matricula, String numeroBastidor, String marca, String modelo, int anyoProduc,
 			TipoVehiculo tipo, Motorizacion motor, int potencia, double tamDeposit, int numPuertas, double consumo,
-			LocalDate fechaMatricula, String nIVE, String etiquetaEco) {
+			LocalDate fechaMatricula, String nive, EtiquetaEco etiquetaEco) {
 		this.matricula = matricula;
 		this.numeroBastidor = numeroBastidor;
 		this.marca = marca;
@@ -33,7 +33,26 @@ public class Vehiculo implements IVehiculo{
 		this.numPuertas = numPuertas;
 		this.consumo = consumo;
 		this.fechaMatricula = fechaMatricula;
-		this.nIVE = nIVE;
+		this.nive = nive;
+		this.etiquetaEco = etiquetaEco;
+	}
+
+	public Vehiculo(String matricula, String numeroBastidor, String marca, String modelo, int anyoProduc,
+			String motor, String tipo_vehiculo, int potencia, double tamDeposit, int numPuertas, double consumo,
+			LocalDate fechaMatricula, String nive, String etiquetaEco) {
+		this.matricula = matricula;
+		this.numeroBastidor = numeroBastidor;
+		this.marca = marca;
+		this.modelo = modelo;
+		this.anyoProduc = anyoProduc;
+		setTipo(tipo);
+		setMotor(motor);
+		this.potencia = potencia;
+		this.tamDeposit = tamDeposit;
+		this.numPuertas = numPuertas;
+		this.consumo = consumo;
+		this.fechaMatricula = fechaMatricula;
+		this.nive = nive;
 		this.etiquetaEco = etiquetaEco;
 	}
 
@@ -84,13 +103,33 @@ public class Vehiculo implements IVehiculo{
 	public void setTipo(TipoVehiculo tipo) {
 		this.tipo = tipo;
 	}
-
+	
+	public void setTipo(String tipo) {
+		try {
+			// Se intorduce el string en el enum con valueOf
+			this.tipo = TipoVehiculo.valueOf(tipo);
+		}catch (IllegalArgumentException e) {
+			// Si hay algún error se pone un valor por defecto
+			this.tipo = TipoVehiculo.otros;
+		}
+	}
+	
 	public Motorizacion getMotor() {
 		return motor;
 	}
 
 	public void setMotor(Motorizacion motor) {
 		this.motor = motor;
+	}
+	
+	public void setMotor(String motor) {
+		try {
+			// Se intorduce el string en el enum con valueOf
+			this.motor = Motorizacion.valueOf(motor);
+		}catch (IllegalArgumentException e) {
+			// Si hay algún error se pone un valor por defecto
+			this.motor = Motorizacion.Diesel;
+		}
 	}
 
 	public int getPotencia() {
@@ -133,20 +172,42 @@ public class Vehiculo implements IVehiculo{
 		this.fechaMatricula = fechaMatricula;
 	}
 
-	public String getnIVE() {
-		return nIVE;
+	public String getnive() {
+		return nive;
 	}
 
-	public void setnIVE(String nIVE) {
-		this.nIVE = nIVE;
+	public void setnive(String nive) {
+		this.nive = nive;
 	}
 
-	public String getEtiquetaEco() {
+	public EtiquetaEco getEtiquetaEco() {
 		return etiquetaEco;
 	}
 
-	public void setEtiquetaEco(String etiquetaEco) {
+	public void setEtiquetaEco(EtiquetaEco etiquetaEco) {
 		this.etiquetaEco = etiquetaEco;
+	}
+	
+	public void setEtiquetaEco(String etiquetaEco) {
+		if(etiquetaEco.equals("0")) {
+			this.etiquetaEco = EtiquetaEco.CERO;
+		}
+		try {
+			// Se intorduce el string en el enum con valueOf
+			EtiquetaEco.valueOf(etiquetaEco);
+		}catch (IllegalArgumentException e) {
+			// Si hay algún error se pone un valor por defecto
+			this.etiquetaEco = EtiquetaEco.C;
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "Vehiculo [matricula=" + matricula + ", numeroBastidor=" + numeroBastidor + ", marca=" + marca
+				+ ", modelo=" + modelo + ", anyoProduc=" + anyoProduc + ", tipo=" + tipo + ", motor=" + motor
+				+ ", potencia=" + potencia + ", tamDeposit=" + tamDeposit + ", numPuertas=" + numPuertas + ", consumo="
+				+ consumo + ", fechaMatricula=" + fechaMatricula + ", nive=" + nive + ", etiquetaEco=" + etiquetaEco
+				+ "]";
 	}
     
     
