@@ -6,7 +6,9 @@ public class Vendedor extends Persona implements IVendedor{
 	private String caEmpresa;
 	private String departamento;
 	private int sueldo;
-	
+	/*
+	 * constructor con todos los valores de persona
+	 */
 	public Vendedor(String nombre, String apellidos, String dni, LocalDateTime fechaNac, int edad, char sexo,
 			String direccion, String localidad, String provincia, int codPostal, String telefono, String correoElec,
 			String caEmpresa, String departamento, int sueldo) {
