@@ -1,8 +1,12 @@
 package concesionario;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.Scanner;
 
-public class GestionVehiculos {
+public class Gestion_Vehiculos {
 	
 	static Scanner scanner = new Scanner(System.in);
 	
@@ -28,7 +32,7 @@ public class GestionVehiculos {
 				// Realizar la operación correspondiente según la opción seleccionada
 				switch (opcion) {
 				case 1:
-					//altaVehiculo();
+					altaVehiculo();
 					break;
 				case 2:
 					//consultaDatos(matricula);
@@ -40,7 +44,7 @@ public class GestionVehiculos {
 					//modificarDatos(matricula);
 					break;
 				case 5:
-					//listarVehiculos();
+					listarVehiculos();
 					break;
 				case 6:
 					System.out.println("Saliendo...");
@@ -56,4 +60,39 @@ public class GestionVehiculos {
 			}
 		} while (opcion != 6);
 	}
+
+	private static void altaVehiculo() {
+		
+		
+	}
+	
+	private static void listarVehiculos() throws Exception{
+		try(Conexion conex = new Conexion();
+			Statement base = conex.getConn().createStatement()){
+			ResultSet salida = base.executeQuery("SELECT * FROM vehiculo");
+			crearVehiculo(salida);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void crearVehiculo(ResultSet resultado) throws SQLException,Exception {
+		String matricula = resultado.getString("matricula");
+		String numeroBastidor = resultado.getString("bastidor");
+		String marca = resultado.getString("marca");
+		String modelo = resultado.getString("modelo");
+		int anyoProduc = resultado.getInt("anyo");
+		double tamDeposit = resultado.getShort("deposito");
+		int numPuertas = resultado.getShort("n_puertas");
+		int potencia = resultado.getShort("potencia");
+		String motor = resultado.getString("motorizacion");
+		String tipo_vehiculo = resultado.getString("tipo_vehiculo");
+		double consumo = resultado.getShort("consumo");
+		LocalDate fechaMatricula = resultado.getDate("fecha_matricula").toLocalDate();
+		String nive = resultado.getString("nive");
+		String etiquetaEco = resultado.getString("etiqueta_eco");
+		
+		new Vehiculo(matricula, numeroBastidor, marca, modelo, anyoProduc, motor, tipo_vehiculo, potencia, tamDeposit, numPuertas, consumo, fechaMatricula, nive, etiquetaEco);	
+	}
+	
 }

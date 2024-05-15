@@ -26,16 +26,16 @@ public class Principal {
 				// Realizar la operación correspondiente según la opción seleccionada
 				switch (opcion) {
 				case 1:
-					GestionVehiculos.menu();
+					Gestion_Vehiculos.menu();
 					break;
 				case 2:
-					GestionClientes.menu();
+					Gestion_Clientes.menu();
 					break;
 				case 3:
-					GestionVendedores.menu();
+					Gestion_Vendedores.menu();
 					break;
 				case 4:
-					GestionVentas.menu();
+					Gestion_Ventas.menu();
 					break;
 				case 5:
 					System.out.println("Saliendo...");
