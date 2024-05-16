@@ -10,6 +10,9 @@ public class Gestion_Vehiculos {
 	
 	static Scanner scanner = new Scanner(System.in);
 	
+	/**
+	 * 
+	 */
 	public static void menu() {
 		int opcion = 6;
 		do {
@@ -65,7 +68,10 @@ public class Gestion_Vehiculos {
 		
 		
 	}
-	
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	private static void listarVehiculos() throws Exception{
 		try(Conexion conex = new Conexion();
 			Statement base = conex.getConn().createStatement()){
@@ -75,7 +81,14 @@ public class Gestion_Vehiculos {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * metodo que crea un vehiculo que llegue desde una base de datos
+	 * @author victor
+	 * @param resultado la sentencia donde esta el vehiculo que quiere construir
+	 * @throws SQLException
+	 * @throws Exception
+	 */
 	private static void crearVehiculo(ResultSet resultado) throws SQLException,Exception {
 		String matricula = resultado.getString("matricula");
 		String numeroBastidor = resultado.getString("bastidor");

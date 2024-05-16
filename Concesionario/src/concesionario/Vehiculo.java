@@ -53,7 +53,7 @@ public class Vehiculo implements IVehiculo{
 		this.consumo = consumo;
 		this.fechaMatricula = fechaMatricula;
 		this.nive = nive;
-		this.etiquetaEco = etiquetaEco;
+		setEtiquetaEco(etiquetaEco);
 	}
 
 	public String getMatricula() {
