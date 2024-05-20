@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class Principal {
 
 	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
 		int opcion = 6;
 		do {
 			try {
@@ -21,7 +20,7 @@ public class Principal {
 				System.out.print("Seleccione una opción: ");
 
 				// Leer la opción del usuario
-				opcion = scanner.nextInt();
+				opcion = Scanners.Int.nextInt();
 
 				// Realizar la operación correspondiente según la opción seleccionada
 				switch (opcion) {

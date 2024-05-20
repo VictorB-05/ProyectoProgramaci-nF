@@ -203,11 +203,10 @@ public class Vehiculo implements IVehiculo{
 
 	@Override
 	public String toString() {
-		return "Vehiculo [matricula=" + matricula + ", numeroBastidor=" + numeroBastidor + ", marca=" + marca
-				+ ", modelo=" + modelo + ", anyoProduc=" + anyoProduc + ", tipo=" + tipo + ", motor=" + motor
-				+ ", potencia=" + potencia + ", tamDeposit=" + tamDeposit + ", numPuertas=" + numPuertas + ", consumo="
-				+ consumo + ", fechaMatricula=" + fechaMatricula + ", nive=" + nive + ", etiquetaEco=" + etiquetaEco
-				+ "]";
+		return "Matricula: " + matricula + " Numero bastidor: " + numeroBastidor + " Marca: " + marca
+				+ " Modelo: " + modelo + " Año producion: " + anyoProduc + " Tipo: " + tipo + " Motor: " + motor+"\n"
+				+ "Potencia: " + potencia + " Tamaño deposito: " + tamDeposit + " Numero puertas: " + numPuertas
+				+ " Consumo: "+ consumo + " Fecha matricula: " + fechaMatricula + " NIVE: " + nive + " Etiqueta Ecologica: " + etiquetaEco;
 	}
     
     
