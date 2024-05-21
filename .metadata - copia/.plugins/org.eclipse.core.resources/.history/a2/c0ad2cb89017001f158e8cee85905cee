@@ -1,0 +1,283 @@
+
+package concesionario;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+
+public class Gestion_Vehiculos {
+
+	public static void menu() {
+		int opcion = 6;
+		do {
+			try {
+				// Mostrar el menú
+				System.out.println("\tGestion Vehiculos:");
+				System.out.println("-------------------------------------------------------");
+				System.out.println("\t1. Alta Vehículo");
+				System.out.println("\t2. Consulta Datos Vehículo (Matrícula)");
+				System.out.println("\t3. Baja Vehículo (Matrícula)");
+				System.out.println("\t4. Modificar datos Vehículo (Matrícula)");
+				System.out.println("\t5. Listado de los vehículos");
+				System.out.println("\t6. Volver al menú principal");
+				System.out.println("-------------------------------------------------------");
+				System.out.print("Seleccione una opción: ");
+
+				// Leer la opción del usuario
+				opcion = Scanners.Int.nextInt();
+
+				// Realizar la operación correspondiente según la opción seleccionada
+				switch (opcion) {
+				case 1:
+					altaVehiculo();
+					break;
+				case 2:
+					// consultaDatos(matricula);
+					break;
+				case 3:
+					// bajaVehiculo(matricula);
+					break;
+				case 4:
+					// modificarDatos(matricula);
+					break;
+				case 5:
+					listarVehiculos();
+					break;
+				case 6:
+					System.out.println("Saliendo...");
+					break;
+				default:
+					System.out.println("Opción no válida. Intente nuevamente.");
+				}
+
+			} catch (NumberFormatException e) {
+				System.out.println("Formato no valido");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} while (opcion != 6);
+	}
+
+	/**
+	 * Metodo que intorduce un vehiculo a la base de datos metido desde teclado para
+	 * insertarlo atraves de un PreparedStatement
+	 * 
+	 * @author victor
+	 * @see PreparedStatement
+	 */
+	private static void altaVehiculo() {
+		String matricula = Scanners.IntroS("Ingrese la matrícula: ");
+
+		String numeroBastidor = Scanners.IntroS("Ingrese el número de bastidor: ");
+
+		String marca = Scanners.IntroS("Ingrese la marca: ");
+
+		String modelo = Scanners.IntroS("Ingrese el modelo: ");
+
+		int anyoProduc = Scanners.IntroI("Ingrese el año de producción: ");
+
+		TipoVehiculo tipo = leerTipoVehiculo();
+		Motorizacion motor = leerMotorizacion();
+
+		int potencia = Scanners.IntroI("Ingrese la potencia: ");
+
+		double tamDeposit = Scanners.IntroD("Ingrese el tamaño del depósito: ");
+
+		int numPuertas = Scanners.IntroI("Ingrese el número de puertas: ");
+
+		double consumo = Scanners.IntroD("Ingrese el consumo: ");
+
+		LocalDate fechaMatricula = null;
+		boolean rep = false;
+		do {
+			try {
+				String fechaMatriculaStr = Scanners.IntroS("Ingrese la fecha de matriculación (YYYY-MM-DD): ");
+				fechaMatricula = LocalDate.parse(fechaMatriculaStr);
+				rep = false;
+			} catch (DateTimeParseException e) {
+				System.out.println("Formato de fecha no valido");
+				rep = true;
+			}
+		} while (rep);
+
+		String nive = Scanners.IntroS("Ingrese el NIVE: ");
+
+		EtiquetaEco etiquetaEco = leerEtiquetaEco();
+
+		Vehiculo vehiculo = new Vehiculo(matricula, numeroBastidor, marca, modelo, anyoProduc, tipo, motor, potencia,
+				tamDeposit, numPuertas, consumo, fechaMatricula, nive, etiquetaEco);
+
+		try (Conexion conx = new Conexion();
+				PreparedStatement pstmt = conx.getConn().prepareStatement(
+						"INSERT INTO vehiculo (matricula, bastidor, marca, modelo, anyo, deposito, n_puertas, potencia, motorizacion, tipo_vehiculo, consumo, fecha_matricula, nive, etiqueta_eco) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+			pstmt.setString(1, vehiculo.getMatricula());
+			pstmt.setString(2, vehiculo.getNumeroBastidor());
+			pstmt.setString(3, vehiculo.getMarca());
+			pstmt.setString(4, vehiculo.getModelo());
+			pstmt.setInt(5, vehiculo.getAnyoProduc());
+			pstmt.setDouble(6, vehiculo.getTamDeposit());
+			pstmt.setInt(7, vehiculo.getNumPuertas());
+			pstmt.setInt(8, vehiculo.getPotencia());
+			pstmt.setString(9, vehiculo.getMotor().toString());
+			pstmt.setString(10, vehiculo.getTipo().toString());
+			pstmt.setDouble(11, vehiculo.getConsumo());
+			pstmt.setString(12, desmontarDate(vehiculo.getFechaMatricula().toString()));
+			pstmt.setString(13, vehiculo.getnive());
+			pstmt.setString(14, vehiculo.getEtiquetaEco().toString());
+
+			pstmt.executeUpdate();
+			System.out.println("Vehiculo ingresado");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * Metodo que lista todos los vehiculos de la base de datos
+	 * 
+	 * @author Victor
+	 * @throws Exception
+	 */
+	private static void listarVehiculos() throws Exception {
+		try (Conexion conex = new Conexion(); Statement base = conex.getConn().createStatement()) {
+			ResultSet salida = base.executeQuery("SELECT * FROM vehiculo");
+			for (int i = 1; salida.next(); i++) {
+				Vehiculo vehiculo = crearVehiculo(salida);
+				System.out.println("\t Vehiculo: " + i);
+				System.out.println(vehiculo);
+				System.out.println(
+						"----------------------------------------------------------------------------------------------------------------------------------------------------");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Metodo que crea un vehiculo que llegue desde una base de datos
+	 * <p>
+	 * Se cambia el String fecha matricula por un localDate al introducirlo en
+	 * vehiculo
+	 * 
+	 * @author Victor
+	 * @param resultado la sentencia donde esta el vehiculo que quiere construir
+	 * @throws SQLException
+	 * @throws Exception
+	 */
+	private static Vehiculo crearVehiculo(ResultSet resultado) throws SQLException, Exception {
+		String matricula = resultado.getString("matricula");
+		String numeroBastidor = resultado.getString("bastidor");
+		String marca = resultado.getString("marca");
+		String modelo = resultado.getString("modelo");
+		int anyoProduc = resultado.getInt("anyo");
+		double tamDeposit = resultado.getShort("deposito");
+		int numPuertas = resultado.getShort("n_puertas");
+		int potencia = resultado.getShort("potencia");
+		String motor = resultado.getString("motorizacion");
+		String tipo_vehiculo = resultado.getString("tipo_vehiculo");
+		double consumo = resultado.getShort("consumo");
+		String fecha_matricula = montarDate(resultado.getString("fecha_matricula"));
+		LocalDate fechaMatricula = LocalDate.parse(fecha_matricula);
+		String nive = resultado.getString("nive");
+		String etiquetaEco = resultado.getString("etiqueta_eco");
+
+		return new Vehiculo(matricula, numeroBastidor, marca, modelo, anyoProduc, motor, tipo_vehiculo, potencia,
+				tamDeposit, numPuertas, consumo, fechaMatricula, nive, etiquetaEco);
+
+	}
+
+	/**
+	 * Cambia el formato de la fecha para poder parsearlo a un localDate
+	 * 
+	 * @author Victor
+	 * @param fecha se intoduce una fecha que esta en sistema DD/MM/AAAA
+	 * @return la fecha sale como AAAA-MM-DD
+	 */
+	private static String montarDate(String fecha) {
+		String[] arrayAux = fecha.split("/");
+		fecha = arrayAux[2] + "-" + arrayAux[1] + "-" + arrayAux[0];
+		return fecha;
+	}
+
+	/**
+	 * Cambia el formato de la fecha de un localDate para meterlo en la Base de
+	 * datos
+	 * 
+	 * @author Victor
+	 * @param fecha se intoduce una fecha que esta en sistema AAAA-MM-DD
+	 * @return la fecha sale como DD/MM/AAAA
+	 */
+	private static String desmontarDate(String fecha) {
+		String[] arrayAux = fecha.split("-");
+		fecha = arrayAux[2] + "/" + arrayAux[1] + "/" + arrayAux[0];
+		return fecha;
+	}
+
+	/**
+	 * Metodo el cual muestra todas las opciones del enum TipoVehiculo y las enumera
+	 * cuando se introduzca el numero correspondiente a un valor se asignara ese
+	 * valor
+	 * 
+	 * @return el enum correspondiente al numero marcado
+	 * @see IntroI
+	 */
+	private static TipoVehiculo leerTipoVehiculo() {
+		int opcion;
+		do {
+			String mensaje = "Seleccione el tipo de vehículo:";
+			for (int i = 0; i < TipoVehiculo.values().length; i++) {
+				mensaje += (i + 1) + ". " + TipoVehiculo.values()[i];
+			}
+			opcion = Scanners.IntroI(mensaje);
+			opcion--;
+		} while (opcion > EtiquetaEco.values().length);
+		return TipoVehiculo.values()[opcion];
+	}
+
+	/**
+	 * Metodo el cual muestra todas las opciones del enum Motorizacion y las enumera
+	 * cuando se introduzca el numero correspondiente a un valor se asignara ese
+	 * valor
+	 * 
+	 * @return el enum correspondiente al numero marcado
+	 * @see IntroI
+	 */
+	private static Motorizacion leerMotorizacion() {
+		int opcion;
+		do {
+			String mensaje = "Seleccione la motorización:";
+			for (int i = 0; i < Motorizacion.values().length; i++) {
+				mensaje += (i + 1) + ". " + Motorizacion.values()[i];
+			}
+			opcion = Scanners.IntroI(mensaje);
+			opcion--;
+		} while (opcion > EtiquetaEco.values().length);
+		return Motorizacion.values()[opcion - 1];
+	}
+
+	/**
+	 * Metodo el cual muestra todas las opciones del enum EtiquetaEco y las enumera
+	 * cuando se introduzca el numero correspondiente a un valor se asignara ese
+	 * valor
+	 * 
+	 * @return el enum correspondiente al numero marcado
+	 * @see IntroI
+	 */
+	private static EtiquetaEco leerEtiquetaEco() {
+		int opcion;
+		do {
+			String mensaje = "Seleccione la etiqueta ecológica:";
+			for (int i = 0; i < EtiquetaEco.values().length; i++) {
+				mensaje += (i + 1) + ". " + EtiquetaEco.values()[i];
+			}
+			opcion = Scanners.IntroI(mensaje);
+			opcion--;
+		} while (opcion > EtiquetaEco.values().length);
+		return EtiquetaEco.values()[opcion];
+	}
+
+}

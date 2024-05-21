@@ -45,7 +45,7 @@ public class Vehiculo implements IVehiculo{
 		this.marca = marca;
 		this.modelo = modelo;
 		this.anyoProduc = anyoProduc;
-		setTipo(tipo);
+		setTipo(tipo_vehiculo);
 		setMotor(motor);
 		this.potencia = potencia;
 		this.tamDeposit = tamDeposit;
@@ -110,7 +110,7 @@ public class Vehiculo implements IVehiculo{
 			this.tipo = TipoVehiculo.valueOf(tipo);
 		}catch (IllegalArgumentException e) {
 			// Si hay algún error se pone un valor por defecto
-			this.tipo = TipoVehiculo.otros;
+			this.tipo = TipoVehiculo.Otros;
 		}
 	}
 	

@@ -20,4 +20,7 @@
     <fullyQualifiedTypeName name="java.util.InputMismatchException"/>
     <fullyQualifiedTypeName name="java.util.NoSuchElementException"/>
     <fullyQualifiedTypeName name="java.time.format.DateTimeParseException"/>
+    <fullyQualifiedTypeName name="concesionario.TipoVehiculo"/>
+    <fullyQualifiedTypeName name="concesionario.Motorizacion"/>
+    <fullyQualifiedTypeName name="concesionario.EtiquetaEco"/>
 </qualifiedTypeNameHistroy>

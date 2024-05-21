@@ -10,6 +10,11 @@ public class Scanners {
 	public static Scanner Int = new Scanner(System.in);
 	public static Scanner String = new Scanner(System.in);	
 	
+	/**
+	 * Metodo por el cual se introduce un numero decimal por teclado y es hasta que no sea correcto no puede para de preguntar
+	 * @param mensaje
+	 * @return un numero decimal
+	 */
 	public static double IntroD(String mensaje) {
 		double num  = 0;
 		boolean rep = false;
@@ -27,7 +32,11 @@ public class Scanners {
 
 		return num;
 	}
-	
+	/**
+	 * Metodo por el cual se introduce un numero entero por teclado y es hasta que no sea correcto no puede para de preguntar
+	 * @param mensaje
+	 * @return un numero entero
+	 */
 	public static int IntroI(String mensaje) {
 		int num  = 0;
 		boolean rep = false;
@@ -58,12 +67,6 @@ public class Scanners {
 				System.out.println("Formato no valido");
 				rep = true;
 				String.next();
-			}catch (NoSuchElementException e) {
-				e.printStackTrace();
-			}catch (IllegalStateException e) {
-				System.out.println(" Error en el scanner");
-			}catch (Exception e) {
-				e.printStackTrace();
 			}
 		}while(rep);
 
