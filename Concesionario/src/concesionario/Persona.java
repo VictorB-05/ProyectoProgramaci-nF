@@ -2,7 +2,7 @@ package concesionario;
 
 import java.time.LocalDate;
 
-public class Persona implements IPersona{
+public class Persona implements IPersona {
 	private String nombre;
 	private String apellidos;
 	private String dni;
@@ -15,7 +15,7 @@ public class Persona implements IPersona{
 	private int codPostal;
 	private String telefono;
 	private String correoElec;
-	
+
 	public Persona(String nombre, String apellidos, String dni, LocalDate fechaNac, int edad, char sexo,
 			String direccion, String localidad, String provincia, int codPostal, String telefono, String correoElec) {
 		this.nombre = nombre;
@@ -35,7 +35,7 @@ public class Persona implements IPersona{
 	public Persona(String dni) {
 		this.dni = dni;
 	}
-	
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -131,6 +131,13 @@ public class Persona implements IPersona{
 	public void setCorreoElec(String correoElec) {
 		this.correoElec = correoElec;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "Nombre: " + nombre + " apellidos: " + apellidos + " dni: " + dni + " fechaNac: " + fechaNac + " edad: "
+				+ edad + " sexo: " + sexo + " direccion: " + direccion + " localidad: " + localidad + "\n"
+				+ " provincia: " + provincia + " codPostal: " + codPostal + " telefono: " + telefono + " correoElec: "
+				+ correoElec;
+	}
+
 }

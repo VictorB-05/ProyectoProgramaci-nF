@@ -1,15 +1,31 @@
 package concesionario;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Vendedor extends Persona implements IVendedor{
 	private String caEmpresa;
 	private String departamento;
 	private int sueldo;
-	/*
+	
+	/**
 	 * constructor con todos los valores de persona
+	 * @param nombre
+	 * @param apellidos
+	 * @param dni
+	 * @param fechaNac
+	 * @param edad
+	 * @param sexo
+	 * @param direccion
+	 * @param localidad
+	 * @param provincia
+	 * @param codPostal
+	 * @param telefono
+	 * @param correoElec
+	 * @param caEmpresa
+	 * @param departamento
+	 * @param sueldo
 	 */
-	public Vendedor(String nombre, String apellidos, String dni, LocalDateTime fechaNac, int edad, char sexo,
+	public Vendedor(String nombre, String apellidos, String dni, LocalDate fechaNac, int edad, char sexo,
 			String direccion, String localidad, String provincia, int codPostal, String telefono, String correoElec,
 			String caEmpresa, String departamento, int sueldo) {
 		super(nombre, apellidos, dni, fechaNac, edad, sexo, direccion, localidad, provincia, codPostal, telefono,

@@ -412,7 +412,7 @@ public class Gestion_Vehiculos {
 				System.out.println("\t Vehiculo: " + i);
 				System.out.println(vehiculo);
 				System.out.println(
-						"----------------------------------------------------------------------------------------------------------------------------------------------------");
+						"____________________________________________________________________________________________________________________________________________________");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -463,7 +463,7 @@ public class Gestion_Vehiculos {
 	private static TipoVehiculo leerTipoVehiculo() {
 		int opcion;
 		do {
-			String mensaje = "Seleccione el tipo de vehículo:";
+			String mensaje = "Seleccione el tipo de vehículo:\n";
 			for (int i = 0; i < TipoVehiculo.values().length; i++) {
 				mensaje += (i + 1) + ". " + TipoVehiculo.values()[i]+"\n";
 			}
@@ -484,7 +484,7 @@ public class Gestion_Vehiculos {
 	private static Motorizacion leerMotorizacion() {
 		int opcion;
 		do {
-			String mensaje = "Seleccione la motorización:";
+			String mensaje = "Seleccione la motorización:\n";
 			for (int i = 0; i < Motorizacion.values().length; i++) {
 				mensaje += (i + 1) + ". " + Motorizacion.values()[i]+"\n";
 			}
@@ -505,7 +505,7 @@ public class Gestion_Vehiculos {
 	private static EtiquetaEco leerEtiquetaEco() {
 		int opcion;
 		do {
-			String mensaje = "Seleccione la etiqueta ecológica:";
+			String mensaje = "Seleccione la etiqueta ecológica:\n";
 			for (int i = 0; i < EtiquetaEco.values().length; i++) {
 				mensaje += (i + 1) + ". " + EtiquetaEco.values()[i]+"\n";
 			}

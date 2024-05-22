@@ -2,45 +2,67 @@ package concesionario;
 
 
 public class Cuenta_Bancaria {
-	private String nombre;
-	private String apellidos;
+	private String banco;	
+	private String titular;
 	private String dni;
-	private String banco;
-	private int cuentaCorre;
+	private String cuentaIban;
 	private String provincia;
 	
-	public Cuenta_Bancaria(String nombre, String apellidos, String dni, String banco, int cuentaCorre, String provincia) {
-		this.nombre = nombre;
-		this.apellidos = apellidos;
+	/**
+	 * 
+	 * @param nombre
+	 * @param apellidos
+	 * @param banco
+	 * @param cuentaIban
+	 * @param provincia
+	 */
+	public Cuenta_Bancaria(String nombre, String apellidos, String dni, String banco, String cuentaIban, String provincia) {
+		this.titular = nombre+" "+apellidos;
 		this.dni = dni;
 		this.banco = banco;
-		this.cuentaCorre = cuentaCorre;
+		this.cuentaIban = cuentaIban;
 		this.provincia = provincia;
 	}
 	
-	public Cuenta_Bancaria(String nombre, String apellidos, String dni, String provincia) {
-		this.nombre = nombre;
-		this.apellidos = apellidos;
+	/**
+	 * 
+	 * @param titular
+	 * @param banco
+	 * @param cuentaIban
+	 * @param provincia
+	 */
+	public Cuenta_Bancaria(String titular, String banco, String dni, String cuentaIban, String provincia) {
+		this.titular = titular;
 		this.dni = dni;
+		this.banco = banco;
+		this.cuentaIban = cuentaIban;
 		this.provincia = provincia;
 	}
 	
-	public String getNombre() {
-		return nombre;
+	/**
+	 * 
+	 * @param nombre
+	 * @param apellidos
+	 * @param cuentaIban
+	 */
+	public Cuenta_Bancaria(String nombre, String apellidos, String dni, String cuentaIban) {
+		this.titular = nombre+" "+apellidos;
+		this.dni = dni;
+		this.cuentaIban = cuentaIban;
+	}
+	
+	public String getTitular() {
+		return titular;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+	public void setTitular(String titular) {
+		this.titular = titular;
 	}
-
-	public String getApellidos() {
-		return apellidos;
+	
+	public void setTitular(String nombre,String apellido) {
+		this.titular = nombre+" "+apellido;
 	}
-
-	public void setApellidos(String apellidos) {
-		this.apellidos = apellidos;
-	}
-
+	
 	public String getDni() {
 		return dni;
 	}
@@ -57,12 +79,12 @@ public class Cuenta_Bancaria {
 		this.banco = banco;
 	}
 
-	public int getCuentaCorre() {
-		return cuentaCorre;
+	public String getCuentaIban() {
+		return cuentaIban;
 	}
 
-	public void setCuentaCorre(int cuentaCorre) {
-		this.cuentaCorre = cuentaCorre;
+	public void setCuentaIban(String cuentaIban) {
+		this.cuentaIban = cuentaIban;
 	}
 
 	public String getProvincia() {

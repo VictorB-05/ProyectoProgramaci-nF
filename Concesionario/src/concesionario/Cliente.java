@@ -9,8 +9,22 @@ public class Cliente extends Persona implements ICliente{
 	private Cliente representante;
 	
 	/**
-	 * Constructor de aquellos clientes sin representante
-	 **/
+	 * Constructor de aquellos clientes sin representante pasando los datos bancarios
+	 * @param nombre
+	 * @param apellidos
+	 * @param dni
+	 * @param fechaNac
+	 * @param edad
+	 * @param sexo
+	 * @param direccion
+	 * @param localidad
+	 * @param provincia
+	 * @param codPostal
+	 * @param telefono
+	 * @param correoElec
+	 * @param datosBan
+	 * @param fechaAlta
+	 */
 	public Cliente(String nombre, String apellidos, String dni, LocalDate fechaNac, int edad, char sexo,
 			String direccion, String localidad, String provincia, int codPostal, String telefono, String correoElec,
 			Cuenta_Bancaria datosBan,LocalDate fechaAlta) {
@@ -18,7 +32,24 @@ public class Cliente extends Persona implements ICliente{
 		this.datosBan = datosBan;
 		this.fAlta = fechaAlta;
 	}
-
+	
+	/**
+	 * Constructor de aquellos clientes con representante pasando los datos bancarios
+	 * @param nombre
+	 * @param apellidos
+	 * @param dni
+	 * @param fechaNac
+	 * @param edad
+	 * @param sexo
+	 * @param direccion
+	 * @param localidad
+	 * @param provincia
+	 * @param codPostal
+	 * @param telefono
+	 * @param correoElec
+	 * @param datosBan
+	 * @param fechaAlta
+	 */
 	public Cliente(String nombre, String apellidos, String dni, LocalDate fechaNac, int edad, char sexo,
 			String direccion, String localidad, String provincia, int codPostal, String telefono, String correoElec,
 			Cuenta_Bancaria datosBan, Cliente representante, LocalDate fechaAlta) {
@@ -44,14 +75,16 @@ public class Cliente extends Persona implements ICliente{
 	 * @param correoElec
 	 * @param representante
 	 * @param fechaAlta
+	 * @param mayorEdad
 	 */
 	public Cliente(String nombre, String apellidos, String dni, LocalDate fechaNac, int edad, char sexo,
 			String direccion, String localidad, String provincia, int codPostal, String telefono, String correoElec,
-			Cliente representante, LocalDate fechaAlta) {
+			Cliente representante, LocalDate fechaAlta,boolean mayorEdad,String cuentaBancaria) {
 		super(nombre, apellidos, dni, fechaNac, edad, sexo, direccion, localidad, provincia, codPostal, telefono, correoElec);
-		this.datosBan = new Cuenta_Bancaria(nombre, apellidos, dni, correoElec, codPostal, provincia);
+		this.datosBan = new Cuenta_Bancaria(nombre, apellidos, dni, cuentaBancaria);
 		this.representante = representante;
 		this.fAlta = fechaAlta;
+		this.mayorEdad = mayorEdad;
 	}
 	/**
 	 * Metodo usado para crear a los clientes desde la base de datos sin representante
@@ -67,14 +100,16 @@ public class Cliente extends Persona implements ICliente{
 	 * @param codPostal
 	 * @param telefono
 	 * @param correoElec
-	 * @param fechaAlta
+	 * @param fechaAlta	 
+	 * @param mayorEdad
 	 */
 	public Cliente(String nombre, String apellidos, String dni, LocalDate fechaNac, int edad, char sexo,
 			String direccion, String localidad, String provincia, int codPostal, String telefono, String correoElec,
-			LocalDate fechaAlta) {
+			LocalDate fechaAlta,boolean mayorEdad,String cuentaBancaria) {
 		super(nombre, apellidos, dni, fechaNac, edad, sexo, direccion, localidad, provincia, codPostal, telefono, correoElec);
-		this.datosBan = new Cuenta_Bancaria(nombre, apellidos, dni, correoElec, codPostal, provincia);
+		this.datosBan = new Cuenta_Bancaria(nombre, apellidos, dni, cuentaBancaria);
 		this.fAlta = fechaAlta;
+		this.mayorEdad = mayorEdad;
 	}
 	
 	public Cliente(String dni) {
@@ -111,6 +146,16 @@ public class Cliente extends Persona implements ICliente{
 
 	public void setRepresentante(Cliente representante) {
 		this.representante = representante;
+	}
+
+	@Override
+	public String toString() {
+		if(mayorEdad) {
+			return  super.toString()+" fecha alta:" + fAlta.toString();
+		}else {
+			return  super.toString()+" fecha alta:" + fAlta.toString() + "\n"
+			+ "\t Representante:\n" + representante;
+		}
 	}
 
 	

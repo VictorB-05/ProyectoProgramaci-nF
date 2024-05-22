@@ -3,6 +3,7 @@ package concesionario;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 
 public class Gestion_Clientes {
@@ -31,7 +32,7 @@ public class Gestion_Clientes {
 				// Realizar la operación correspondiente según la opción seleccionada
 				switch (opcion) {
 				case 1:
-					//altaCliente();
+					// altaCliente();
 					break;
 				case 2:
 					System.out.println("Introduce el dni: ");
@@ -41,22 +42,22 @@ public class Gestion_Clientes {
 				case 3:
 					System.out.println("Introduce el dni: ");
 					dni = Scanners.String.nextLine();
-					//modificarDatos(dni);
+					// modificarDatos(dni);
 					break;
 				case 4:
-					System.out.println("Introduce ek dni: ");
+					System.out.println("Introduce eL dni: ");
 					dni = Scanners.String.nextLine();
-					//asignarCuentaB(dni);
+					// asignarCuentaB(dni);
 					break;
 				case 5:
-					//listarClientes();
+					listarClientes();
 					break;
 				case 6:
-					//listarClientesMenores();
+					listarClientesMenores();
 					break;
 				case 7:
 					int anyo = Scanners.IntroI("Introduce el año a visualizar :");
-					//listarClientesAlta(anyo);
+					listarClientesAlta(anyo);
 					break;
 				case 8:
 					System.out.println("Saliendo...");
@@ -71,24 +72,24 @@ public class Gestion_Clientes {
 		} while (opcion != 6);
 	}
 
-	
 	/**
-	 * Metodo que recibe un DNI y da los datos del cliente con ese DNI
-	 * que este en la base de datos se utiliza un PreparedStatement para mayor
-	 * integridad de la base de datos
-	 * <p> La conexión esta hecha atraves de la clase Conexion que importa AutoCloseable
-	 * lo que la hace usable en un try-with esto sirve para que el programador no tenga 
-	 * que preocuparse de que por algún error la conexión no se cierre
+	 * Metodo que recibe un DNI y da los datos del cliente con ese DNI que este en
+	 * la base de datos se utiliza un PreparedStatement para mayor integridad de la
+	 * base de datos
+	 * <p>
+	 * La conexión esta hecha atraves de la clase Conexion que importa AutoCloseable
+	 * lo que la hace usable en un try-with esto sirve para que el programador no
+	 * tenga que preocuparse de que por algún error la conexión no se cierre
+	 * 
 	 * @param dni
-	 * @throws Exception	 
+	 * @throws Exception
 	 * @see crearCliente
-	 * @see Cliente 
+	 * @see Cliente
 	 * @see Conexion
 	 */
 	public static void consultaDatos(String dni) throws Exception {
 		try (Conexion conex = new Conexion();
-				PreparedStatement pstmt = conex.getConn()
-						.prepareStatement("SELECT * FROM cliente WHERE dni = ? ")) {
+				PreparedStatement pstmt = conex.getConn().prepareStatement("SELECT * FROM cliente WHERE dni = ? ")) {
 			pstmt.setString(1, dni);
 			try (ResultSet salida = pstmt.executeQuery()) {
 				if (salida.next()) {
@@ -102,18 +103,141 @@ public class Gestion_Clientes {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void asignarCuentaB(String dni) throws Exception {
+		try(Conexion conex = new Conexion();
+			PreparedStatement pstmt = conex.getConn().prepareStatement("SELECT * FROM cliente WHERE fecha_nacimiento = ? ")) {
+			pstmt.setString(1, dni);
+			try (ResultSet salida = pstmt.executeQuery()) {
+				if (salida.next()) {
+					Cliente cliente = crearCliente(salida);
+					System.out.println(cliente);
+					crearCuentaB(conex,cliente.getDatosBan().getCuentaIban())
+				} else {
+					System.out.println("DNI no encontrado en la base de datos");
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Da los datos de todos los cliente que hay en la base de datos
+	 * <p>
+	 * La conexión esta hecha atraves de la clase Conexion que importa AutoCloseable
+	 * lo que la hace usable en un try-with esto sirve para que el programador no
+	 * tenga que preocuparse de que por algún error la conexión no se cierre
+	 * 
+	 * @param dni
+	 * @throws Exception
+	 * @see crearCliente
+	 * @see Cliente
+	 * @see Conexion
+	 */
+	public static void listarClientes() throws Exception {
+		try (Conexion conex = new Conexion();
+				Statement base = conex.getConn().createStatement();
+				ResultSet salida = base.executeQuery("SELECT * FROM cliente")) {
+			listarClientes(salida);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Da los datos de todos los cliente que hay en la base de datos que sean menor de edad
+	 * <p>
+	 * La conexión esta hecha atraves de la clase Conexion que importa AutoCloseable
+	 * lo que la hace usable en un try-with esto sirve para que el programador no
+	 * tenga que preocuparse de que por algún error la conexión no se cierre
+	 * 
+	 * @param dni
+	 * @throws Exception
+	 * @see crearCliente
+	 * @see Cliente
+	 * @see Conexion
+	 */
+	public static void listarClientesMenores() throws Exception {
+		try (Conexion conex = new Conexion();
+				Statement base = conex.getConn().createStatement();
+				ResultSet salida = base.executeQuery("SELECT * FROM cliente WHERE EDAD < 18")) {
+			listarClientes(salida);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Da los datos de todos los cliente que hay en la base de datos que su año de alta 
+	 * sea el pasado por el usuario
+	 * <p>
+	 * La conexión esta hecha atraves de la clase Conexion que importa AutoCloseable
+	 * lo que la hace usable en un try-with esto sirve para que el programador no
+	 * tenga que preocuparse de que por algún error la conexión no se cierre
+	 * 
+	 * @param dni
+	 * @throws Exception
+	 * @see crearCliente
+	 * @see Cliente
+	 * @see Conexion
+	 */
+	public static void listarClientesAlta(int anyo) throws Exception {
+		try (Conexion conex = new Conexion();
+			PreparedStatement pstmt = conex.getConn().prepareStatement("SELECT * FROM cliente WHERE fecha_nacimiento like ? ")) {
+			pstmt.setString(1, "%/%/"+anyo);
+			try (ResultSet salida = pstmt.executeQuery()) {
+				listarClientes(salida);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Metodo que atraves de un ResultSet crea los clientes por el metodo crearCliente
+	 * y luego los imprime por pantalla
+	 * 
+	 * @param salida
+	 * @throws SQLException
+	 * @throws Exception
+	 * @see crearCliente
+	 */
+	private static void listarClientes(ResultSet salida) throws SQLException, Exception {
+		System.out.println("\tLista clientes:");
+		System.out.println("___________________________________________________________________________________________________________________________________________________________________");
+		while (salida.next()) {
+			Cliente cliente = crearCliente(salida);
+			if (cliente.getMayorEdad()) {
+				System.out.println("Cliente: " + cliente.getNombre() + " " + cliente.getApellidos() + " DNI: "
+						+ cliente.getDni() + " fecha nacimiento: " + cliente.getFechaNac() + " edad: "
+						+ cliente.getEdad() + " sexo: " + cliente.getSexo() + " direccion: " + cliente.getDireccion()
+						+ " localidad: " + cliente.getLocalidad() + " provincia: " + cliente.getProvincia()+"\n"
+						+ "Codigo postal: " + cliente.getCodPostal() + " telefono: " + cliente.getTelefono()
+						+ " correo: " + cliente.getCorreoElec());
+			}else {
+				System.out.println("Cliente: " + cliente.getNombre() + " " + cliente.getApellidos() + " DNI: "
+						+ cliente.getDni() + " fecha nacimiento: " + cliente.getFechaNac() + " edad: "
+						+ cliente.getEdad() + " sexo: " + cliente.getSexo() + " direccion: " + cliente.getDireccion()
+						+ " localidad: " + cliente.getLocalidad() + " provincia: " + cliente.getProvincia()+"\n"
+						+ "Codigo postal: " + cliente.getCodPostal() + " telefono: " + cliente.getTelefono()
+						+ " correo: " + cliente.getCorreoElec()+" DNI representante: "+ cliente.getRepresentante().getDni());
+			}
+			System.out.println("___________________________________________________________________________________________________________________________________________________________________");
+		}
+	}
 
 	/**
-	 * Metodo que crea un vehiculo que llegue desde una base de datos
+	 * Metodo que crea un cliente que llegue desde una base de datos
 	 * <p>
-	 * Se cambia el String fecha matricula por un localDate al introducirlo en
-	 * vehiculo
+	 * Se cambia el String fecha Nacimiento, fecha alta por un localDate al introducirlo en
+	 * cliente
 	 * 
 	 * @param resultado la sentencia donde esta el vehiculo que quiere construir
 	 * @throws SQLException
 	 * @throws Exception
 	 */
-	private static Cliente crearCliente(ResultSet resultado) throws SQLException, Exception{
+	private static Cliente crearCliente(ResultSet resultado) throws SQLException, Exception {
 		String dni = resultado.getString("dni");
 		String nombre = resultado.getString("nombre");
 		String apellidos = resultado.getString("apellidos");
@@ -132,28 +256,33 @@ public class Gestion_Clientes {
 		LocalDate fechaAlta = LocalDate.parse(fecha_alta);
 		String mayor_edad = resultado.getString("mayor_edad");
 		Boolean mayorEdad;
-		if(mayor_edad.equals("S")) {
+		if (mayor_edad.equals("S")) {
 			mayorEdad = true;
-		}else if(mayor_edad.equals("N")) {
+		} else if (mayor_edad.equals("N")) {
 			mayorEdad = false;
-		}else {
+		} else {
 			// si hay algun error el programa calcula si es mayor de edad
 			mayorEdad = LocalDate.now().isAfter(fechaNac.plusYears(18));
 		}
 		String representanteDni = resultado.getString("representante_dni");
 		Cliente cliente;
 
-		if(!(representanteDni !=null)||representanteDni.isEmpty()||representanteDni.isBlank()) {
-			cliente = new Cliente(nombre, apellidos, dni, fechaNac, edad, sexo, direccion, localidad, provincia, codPostal, telefono, correo_e, fechaAlta);
-		}else {
+		if (!(representanteDni != null) || representanteDni.isEmpty() || representanteDni.isBlank()) {
+			cliente = new Cliente(nombre, apellidos, dni, fechaNac, edad, sexo, direccion, localidad, provincia,
+					codPostal, telefono, correo_e, fechaAlta, mayorEdad, cuentaBancaria);
+		} else {
 			Cliente representante = new Cliente(representanteDni);
-			cliente= new Cliente(nombre, apellidos, dni, fechaNac, edad, sexo, direccion, localidad, provincia, codPostal, telefono, correo_e, representante, fechaAlta);
+			cliente = new Cliente(nombre, apellidos, dni, fechaNac, edad, sexo, direccion, localidad, provincia,
+					codPostal, telefono, correo_e, representante, fechaAlta, mayorEdad, cuentaBancaria);
 		}
-		
-		
+
 		return cliente;
 	}
-	
-	
+
+	private static Cuenta_Bancaria crearCuentaB(Conexion conex, String cuentaBancaria) {
+		Cuenta_Bancaria cuentaB;
+		
+		return cuentaB;
+	}
 	
 }
