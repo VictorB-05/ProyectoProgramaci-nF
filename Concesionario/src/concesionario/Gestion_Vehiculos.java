@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.InputMismatchException;
 
 public class Gestion_Vehiculos {
 
@@ -60,8 +61,9 @@ public class Gestion_Vehiculos {
 					System.out.println("Opción no válida. Intente nuevamente.");
 				}
 
-			} catch (NumberFormatException e) {
+			} catch (InputMismatchException e) {
 				System.out.println("Formato no valido");
+				Scanners.Int.next();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -71,9 +73,14 @@ public class Gestion_Vehiculos {
 	/**
 	 * Metodo que intorduce un vehiculo a la base de datos metido desde teclado para
 	 * insertarlo atraves de un PreparedStatement
-	 * 
+	 * <p> La conexión esta hecha atraves de la clase Conexion que importa AutoCloseable
+	 * lo que la hace usable en un try-with esto sirve para que el programador no tenga 
+	 * que preocuparse de que por algún error la conexión no se cierre
 	 * @author victor
 	 * @see PreparedStatement
+	 * @see crearVehiculo
+	 * @see Vehiculo 
+	 * @see Conexion
 	 */
 	public static void altaVehiculo() {
 		String matricula = Scanners.IntroS("Ingrese la matrícula: ");
@@ -147,9 +154,14 @@ public class Gestion_Vehiculos {
 	 * Metodo que recibe una matricula y da los datos del vehiculo con esa matricula
 	 * que este en la base de datos se utiliza un PreparedStatement para mayor
 	 * integridad de la base de datos
-	 * 
+	 * <p> La conexión esta hecha atraves de la clase Conexion que importa AutoCloseable
+	 * lo que la hace usable en un try-with esto sirve para que el programador no tenga 
+	 * que preocuparse de que por algún error la conexión no se cierre
 	 * @param matricula
-	 * @throws Exception
+	 * @throws Exception	 
+	 * @see crearVehiculo
+	 * @see Vehiculo 
+	 * @see Conexion
 	 */
 	public static void consultaDatos(String matricula) throws Exception {
 		try (Conexion conex = new Conexion();
@@ -173,9 +185,14 @@ public class Gestion_Vehiculos {
 	 * Metodo que recibe una matricula y elimina el vehiculo con esa matricula que
 	 * este en la base de datos se utiliza un PreparedStatement para mayor
 	 * integridad de la base de datos
-	 * 
+	 * <p> La conexión esta hecha atraves de la clase Conexion que importa AutoCloseable
+	 * lo que la hace usable en un try-with esto sirve para que el programador no tenga 
+	 * que preocuparse de que por algún error la conexión no se cierre
 	 * @param matricula
 	 * @throws Exception
+	 * @see crearVehiculo
+	 * @see Vehiculo 
+	 * @see Conexion
 	 */
 	public static void bajaVehiculo(String matricula) throws Exception {
 		try (Conexion conex = new Conexion();
@@ -207,10 +224,19 @@ public class Gestion_Vehiculos {
 
 	/**
 	 *  Esta clase modifica los datos de un vehiculo en la base de datos atraves de una matricula
-	 *  dada por el usuario para la integridad de la base de datos se usa un PreparedStatement
-	 *  busacamos el vehiculo de la matricula 
+	 *  dada por el usuario para la integridad de la base de datos se usa un PreparedStatement,
+	 *  busacamos el vehiculo de la matricula si no existe la matricula se notifica al usuario.
+	 *  Si existe se la mostraran las opciones de que atributos cambiar y cuales son en el vehiculo.
+	 *  <p>
+	 *  Además cada vez que se elige una opción se actualizara el metodo tanto en el obejto vehiculo,
+	 *  como en la base de datos
+	 *  <p> La conexión esta hecha atraves de la clase Conexion que importa AutoCloseable
+	 *  lo que la hace usable en un try-with esto sirve para que el programador no tenga 
 	 * @param matricula
 	 * @throws Exception
+	 * @see crearVehiculo
+	 * @see Vehiculo 
+	 * @see Conexion
 	 */
 	public static void modificarDatos(String matricula) throws Exception {
 		try (Conexion conex = new Conexion();
@@ -344,7 +370,7 @@ public class Gestion_Vehiculos {
 				                updateStmt.setString(1, eco.toString());
 				                break;
 				            }
-							updateStmt.setString(2, matricula); // set the matricula for the WHERE clause
+							updateStmt.setString(2, matricula); // set de la matricula para el where del update
 
 							String opcion = Scanners.IntroS("¿Quieres actualizar este vehículo? (SI/NO):");
 							if (opcion.equalsIgnoreCase("SI")) {
@@ -369,10 +395,18 @@ public class Gestion_Vehiculos {
 	}
 
 	/**
-	 * Metodo que lista todos los vehiculos de la base de datos
+	 * Metodo que lista todos los vehiculos de la base de datos traves de un ResultSet,
+	 * mandando un SELECT * a la base de datos se usa como auxiliar el objeto Vehiculo,
+	 * que se crea en el metodo crearVehiculo al que se le pasa el ResultSet
+	 * <p> La conexión esta hecha atraves de la clase Conexion que importa AutoCloseable
+	 * lo que la hace usable en un try-with esto sirve para que el programador no tenga 
+	 * que preocuparse de que por algún error la conexión no se cierre
 	 * 
 	 * @author Victor
 	 * @throws Exception
+	 * @see crearVehiculo
+	 * @see Vehiculo 
+	 * @see Conexion
 	 */
 	public static void listarVehiculos() throws Exception {
 		try (Conexion conex = new Conexion();

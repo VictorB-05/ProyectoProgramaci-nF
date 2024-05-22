@@ -1,5 +1,6 @@
 package concesionario;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Principal {
@@ -43,8 +44,9 @@ public class Principal {
 					System.out.println("Opción no válida. Intente nuevamente.");
 				}
 
-			} catch (NumberFormatException e) {
+			} catch (InputMismatchException e) {
 				System.out.println("Formato no valido");
+				Scanners.Int.next();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

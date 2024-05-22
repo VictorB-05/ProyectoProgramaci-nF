@@ -191,13 +191,24 @@ public class Vehiculo implements IVehiculo{
 	public void setEtiquetaEco(String etiquetaEco) {
 		if(etiquetaEco.equals("0")) {
 			this.etiquetaEco = EtiquetaEco.CERO;
-		}
-		try {
-			// Se intorduce el string en el enum con valueOf
-			EtiquetaEco.valueOf(etiquetaEco);
-		}catch (IllegalArgumentException e) {
-			// Si hay algún error se pone un valor por defecto
-			this.etiquetaEco = EtiquetaEco.C;
+		}else {
+			/* No funciona no entiendo el motivo 
+			try {
+				// Se intorduce el string en el enum con valueOf
+				EtiquetaEco.valueOf(etiquetaEco);
+			}catch (IllegalArgumentException e) {
+				// Si hay algún error se pone un valor por defecto
+				this.etiquetaEco = EtiquetaEco.C;
+			}*/
+			if(etiquetaEco.equals("ECO")) {
+				this.etiquetaEco = EtiquetaEco.ECO;
+			}else if (etiquetaEco.equals("C")) {
+				this.etiquetaEco = EtiquetaEco.C;
+			}else if (etiquetaEco.equals("B")) {
+				this.etiquetaEco = EtiquetaEco.B;
+			}else if (etiquetaEco.equals("A")) {
+				this.etiquetaEco = EtiquetaEco.A;
+			}
 		}
 	}
 
