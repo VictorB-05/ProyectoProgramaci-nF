@@ -72,4 +72,32 @@ public class Scanners {
 
 		return num;
 	}
+	
+	/**
+	 * Cambia el formato de la fecha para poder parsearlo a un localDate
+	 * 
+	 * @author Victor
+	 * @param fecha se intoduce una fecha que esta en sistema DD/MM/AAAA
+	 * @return la fecha sale como AAAA-MM-DD
+	 */
+	public static String montarDate(String fecha) {
+		String[] arrayAux = fecha.split("/");
+		fecha = arrayAux[2] + "-" + arrayAux[1] + "-" + arrayAux[0];
+		return fecha;
+	}
+
+	/**
+	 * Cambia el formato de la fecha de un localDate para meterlo en la Base de
+	 * datos
+	 * 
+	 * @author Victor
+	 * @param fecha se intoduce una fecha que esta en sistema AAAA-MM-DD
+	 * @return la fecha sale como DD/MM/AAAA
+	 */
+	public static String desmontarDate(String fecha) {
+		String[] arrayAux = fecha.split("-");
+		fecha = arrayAux[2] + "/" + arrayAux[1] + "/" + arrayAux[0];
+		return fecha;
+	}
+	
 }

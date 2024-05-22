@@ -1,12 +1,12 @@
 package concesionario;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Persona implements IPersona{
 	private String nombre;
 	private String apellidos;
 	private String dni;
-	private LocalDateTime fechaNac;
+	private LocalDate fechaNac;
 	private int edad;
 	private char sexo;
 	private String direccion;
@@ -16,7 +16,7 @@ public class Persona implements IPersona{
 	private String telefono;
 	private String correoElec;
 	
-	public Persona(String nombre, String apellidos, String dni, LocalDateTime fechaNac, int edad, char sexo,
+	public Persona(String nombre, String apellidos, String dni, LocalDate fechaNac, int edad, char sexo,
 			String direccion, String localidad, String provincia, int codPostal, String telefono, String correoElec) {
 		this.nombre = nombre;
 		this.apellidos = apellidos;
@@ -32,6 +32,10 @@ public class Persona implements IPersona{
 		this.correoElec = correoElec;
 	}
 
+	public Persona(String dni) {
+		this.dni = dni;
+	}
+	
 	public String getNombre() {
 		return nombre;
 	}
@@ -56,11 +60,11 @@ public class Persona implements IPersona{
 		this.dni = dni;
 	}
 
-	public LocalDateTime getFechaNac() {
+	public LocalDate getFechaNac() {
 		return fechaNac;
 	}
 
-	public void setFechaNac(LocalDateTime fechaNac) {
+	public void setFechaNac(LocalDate fechaNac) {
 		this.fechaNac = fechaNac;
 	}
 

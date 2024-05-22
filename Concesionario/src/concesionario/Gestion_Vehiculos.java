@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.InputMismatchException;
 
 public class Gestion_Vehiculos {
 
@@ -26,10 +25,9 @@ public class Gestion_Vehiculos {
 				System.out.println("\t5. Listado de los vehículos");
 				System.out.println("\t6. Volver al menú principal");
 				System.out.println("-------------------------------------------------------");
-				System.out.print("Seleccione una opción: ");
 
 				// Leer la opción del usuario
-				opcion = Scanners.Int.nextInt();
+				opcion = Scanners.IntroI("Seleccione una opción: ");
 
 				// Realizar la operación correspondiente según la opción seleccionada
 				switch (opcion) {
@@ -61,9 +59,6 @@ public class Gestion_Vehiculos {
 					System.out.println("Opción no válida. Intente nuevamente.");
 				}
 
-			} catch (InputMismatchException e) {
-				System.out.println("Formato no valido");
-				Scanners.Int.next();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -138,7 +133,7 @@ public class Gestion_Vehiculos {
 			pstmt.setString(9, vehiculo.getMotor().toString());
 			pstmt.setString(10, vehiculo.getTipo().toString());
 			pstmt.setDouble(11, vehiculo.getConsumo());
-			pstmt.setString(12, desmontarDate(vehiculo.getFechaMatricula().toString()));
+			pstmt.setString(12, Scanners.desmontarDate(vehiculo.getFechaMatricula().toString()));
 			pstmt.setString(13, vehiculo.getnive());
 			pstmt.setString(14, vehiculo.getEtiquetaEco().toString());
 
@@ -447,7 +442,7 @@ public class Gestion_Vehiculos {
 		String motor = resultado.getString("motorizacion");
 		String tipo_vehiculo = resultado.getString("tipo_vehiculo");
 		double consumo = resultado.getShort("consumo");
-		String fecha_matricula = montarDate(resultado.getString("fecha_matricula"));
+		String fecha_matricula = Scanners.montarDate(resultado.getString("fecha_matricula"));
 		LocalDate fechaMatricula = LocalDate.parse(fecha_matricula);
 		String nive = resultado.getString("nive");
 		String etiquetaEco = resultado.getString("etiqueta_eco");
@@ -455,33 +450,6 @@ public class Gestion_Vehiculos {
 		return new Vehiculo(matricula, numeroBastidor, marca, modelo, anyoProduc, motor, tipo_vehiculo, potencia,
 				tamDeposit, numPuertas, consumo, fechaMatricula, nive, etiquetaEco);
 
-	}
-
-	/**
-	 * Cambia el formato de la fecha para poder parsearlo a un localDate
-	 * 
-	 * @author Victor
-	 * @param fecha se intoduce una fecha que esta en sistema DD/MM/AAAA
-	 * @return la fecha sale como AAAA-MM-DD
-	 */
-	private static String montarDate(String fecha) {
-		String[] arrayAux = fecha.split("/");
-		fecha = arrayAux[2] + "-" + arrayAux[1] + "-" + arrayAux[0];
-		return fecha;
-	}
-
-	/**
-	 * Cambia el formato de la fecha de un localDate para meterlo en la Base de
-	 * datos
-	 * 
-	 * @author Victor
-	 * @param fecha se intoduce una fecha que esta en sistema AAAA-MM-DD
-	 * @return la fecha sale como DD/MM/AAAA
-	 */
-	private static String desmontarDate(String fecha) {
-		String[] arrayAux = fecha.split("-");
-		fecha = arrayAux[2] + "/" + arrayAux[1] + "/" + arrayAux[0];
-		return fecha;
 	}
 
 	/**

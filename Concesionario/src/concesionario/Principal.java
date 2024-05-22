@@ -18,10 +18,9 @@ public class Principal {
 				System.out.println("\t4. GESTIÓN DE VENTAS");
 				System.out.println("\t5. SALIR");
 				System.out.println("-----------------------------------------");
-				System.out.print("Seleccione una opción: ");
 
 				// Leer la opción del usuario
-				opcion = Scanners.Int.nextInt();
+				opcion = Scanners.IntroI("Seleccione una opción: ");
 
 				// Realizar la operación correspondiente según la opción seleccionada
 				switch (opcion) {
@@ -44,9 +43,6 @@ public class Principal {
 					System.out.println("Opción no válida. Intente nuevamente.");
 				}
 
-			} catch (InputMismatchException e) {
-				System.out.println("Formato no valido");
-				Scanners.Int.next();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
