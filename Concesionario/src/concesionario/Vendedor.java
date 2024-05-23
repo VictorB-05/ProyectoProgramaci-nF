@@ -59,4 +59,11 @@ public class Vendedor extends Persona implements IVendedor{
 		this.sueldo = sueldo;
 	}
 
+	@Override
+	public String toString() {
+		return super.toString()+ " categoria: " + caEmpresa + " departamento: " + departamento + " sueldo: " + sueldo;
+	}
+
+	
+	
 }

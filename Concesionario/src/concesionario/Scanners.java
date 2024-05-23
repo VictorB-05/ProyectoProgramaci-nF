@@ -1,7 +1,8 @@
 package concesionario;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Scanners {
@@ -59,15 +60,11 @@ public class Scanners {
 		String num  = null;
 		boolean rep = false;
 		do{
-			try {
+			
 				System.out.println(mensaje);
 				num = String.nextLine();
 				rep = false;
-			}catch (InputMismatchException e) {
-				System.out.println("Formato no valido");
-				rep = true;
-				String.next();
-			}
+
 		}while(rep);
 
 		return num;
@@ -100,4 +97,22 @@ public class Scanners {
 		return fecha;
 	}
 	
+	public static LocalDate IntroFecha(String mensaje) {
+		LocalDate fecha = null;
+		String fechaS;
+		boolean rep = false;
+		do{
+			try {
+				System.out.println(mensaje);
+				fechaS = String.nextLine();
+				fecha = LocalDate.parse(fechaS);
+				rep = false;
+			}catch (DateTimeParseException e) {
+				System.out.println("Formato no valido");
+				rep = true;
+				String.next();
+			}
+		}while(rep);
+		return fecha;
+	}
 }

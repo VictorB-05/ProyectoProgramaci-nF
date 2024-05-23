@@ -7,9 +7,9 @@ public class Cliente extends Persona implements ICliente{
 	private LocalDate fAlta;
 	private Boolean mayorEdad;
 	private Cliente representante;
-	
+		
 	/**
-	 * Constructor de aquellos clientes sin representante pasando los datos bancarios
+	 * Constructor de aquellos clientes con representante no se incia la cuenta bancaria
 	 * @param nombre
 	 * @param apellidos
 	 * @param dni
@@ -22,43 +22,22 @@ public class Cliente extends Persona implements ICliente{
 	 * @param codPostal
 	 * @param telefono
 	 * @param correoElec
-	 * @param datosBan
+	 * @param representante
 	 * @param fechaAlta
 	 */
 	public Cliente(String nombre, String apellidos, String dni, LocalDate fechaNac, int edad, char sexo,
 			String direccion, String localidad, String provincia, int codPostal, String telefono, String correoElec,
-			Cuenta_Bancaria datosBan,LocalDate fechaAlta) {
+			Cliente representante, LocalDate fechaAlta) {
 		super(nombre, apellidos, dni, fechaNac, edad, sexo, direccion, localidad, provincia, codPostal, telefono, correoElec);
-		this.datosBan = datosBan;
 		this.fAlta = fechaAlta;
+		if(super.getEdad()<18) {
+			mayorEdad= false;
+			this.representante = representante;
+		}else {
+			mayorEdad= true;
+		}
 	}
 	
-	/**
-	 * Constructor de aquellos clientes con representante pasando los datos bancarios
-	 * @param nombre
-	 * @param apellidos
-	 * @param dni
-	 * @param fechaNac
-	 * @param edad
-	 * @param sexo
-	 * @param direccion
-	 * @param localidad
-	 * @param provincia
-	 * @param codPostal
-	 * @param telefono
-	 * @param correoElec
-	 * @param datosBan
-	 * @param fechaAlta
-	 */
-	public Cliente(String nombre, String apellidos, String dni, LocalDate fechaNac, int edad, char sexo,
-			String direccion, String localidad, String provincia, int codPostal, String telefono, String correoElec,
-			Cuenta_Bancaria datosBan, Cliente representante, LocalDate fechaAlta) {
-		super(nombre, apellidos, dni, fechaNac, edad, sexo, direccion, localidad, provincia, codPostal, telefono, correoElec);
-		this.datosBan = datosBan;
-		this.representante = representante;
-		this.fAlta = fechaAlta;
-	}
-
 	/**
 	 * Metodo usado para crear a los clientes desde la base de datos con representante
 	 * @param nombre
@@ -86,6 +65,7 @@ public class Cliente extends Persona implements ICliente{
 		this.fAlta = fechaAlta;
 		this.mayorEdad = mayorEdad;
 	}
+	
 	/**
 	 * Metodo usado para crear a los clientes desde la base de datos sin representante
 	 * @param nombre

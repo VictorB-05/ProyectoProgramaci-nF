@@ -31,6 +31,22 @@ public class Persona implements IPersona {
 		this.telefono = telefono;
 		this.correoElec = correoElec;
 	}
+	
+	public Persona(String nombre, String apellidos, String dni, LocalDate fechaNac, char sexo, String direccion,
+			String localidad, String provincia, int codPostal, String telefono, String correoElec) {
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.dni = dni;
+		this.fechaNac = fechaNac;
+		this.edad = calcularEdad(this.fechaNac);
+		this.sexo = sexo;
+		this.direccion = direccion;
+		this.localidad = localidad;
+		this.provincia = provincia;
+		this.codPostal = codPostal;
+		this.telefono = telefono;
+		this.correoElec = correoElec;
+	}
 
 	public Persona(String dni) {
 		this.dni = dni;
@@ -72,8 +88,8 @@ public class Persona implements IPersona {
 		return edad;
 	}
 
-	public void setEdad(int edad) {
-		this.edad = edad;
+	public void setEdad() {
+		this.edad = calcularEdad(fechaNac);
 	}
 
 	public char getSexo() {
@@ -132,6 +148,12 @@ public class Persona implements IPersona {
 		this.correoElec = correoElec;
 	}
 
+	public static int calcularEdad(LocalDate fechaNac) {
+		int edad;
+		for(edad = 0;LocalDate.now().isAfter(fechaNac.plusYears(edad));edad++ );
+		return edad;
+	}
+		
 	@Override
 	public String toString() {
 		return "Nombre: " + nombre + " apellidos: " + apellidos + " dni: " + dni + " fechaNac: " + fechaNac + " edad: "
