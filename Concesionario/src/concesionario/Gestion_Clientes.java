@@ -32,7 +32,7 @@ public class Gestion_Clientes {
 				// Realizar la operación correspondiente según la opción seleccionada
 				switch (opcion) {
 				case 1:
-					// altaCliente();
+					altaCliente();
 					break;
 				case 2:
 					System.out.println("Introduce el dni: ");
@@ -42,12 +42,12 @@ public class Gestion_Clientes {
 				case 3:
 					System.out.println("Introduce el dni: ");
 					dni = Scanners.String.nextLine();
-					// modificarDatos(dni);
+					modificarDatos(dni);
 					break;
 				case 4:
 					System.out.println("Introduce eL dni: ");
 					dni = Scanners.String.nextLine();
-					// asignarCuentaB(dni);
+					asignarCuentaB(dni);
 					break;
 				case 5:
 					listarClientes();
@@ -69,8 +69,13 @@ public class Gestion_Clientes {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} while (opcion != 6);
+		} while (opcion != 8);
 	}
+	
+	public static void altaCliente() {
+		//Preguntar si se mete la cuenta bancaria directamente aquí
+	}
+	
 
 	/**
 	 * Metodo que recibe un DNI y da los datos del cliente con ese DNI que este en
@@ -89,7 +94,7 @@ public class Gestion_Clientes {
 	 */
 	public static void consultaDatos(String dni) throws Exception {
 		try (Conexion conex = new Conexion();
-				PreparedStatement pstmt = conex.getConn().prepareStatement("SELECT * FROM cliente WHERE dni = ? ")) {
+			PreparedStatement pstmt = conex.getConn().prepareStatement("SELECT * FROM cliente WHERE dni = ? ")) {
 			pstmt.setString(1, dni);
 			try (ResultSet salida = pstmt.executeQuery()) {
 				if (salida.next()) {
@@ -104,15 +109,54 @@ public class Gestion_Clientes {
 		}
 	}
 	
+	public static void modificarDatos(String dni) {
+		//Preguntar si se cambia aquí el Iban o no obviamente el DNI no
+	}
+	
+	/**
+	 * Asigna una nueva cuenta bancaria a un cliente basado en su DNI.
+	 * <p>
+	 * Este método busca un cliente en la base de datos usando el DNI proporcionado.
+	 * Si el cliente ya tiene una cuenta bancaria asociada, informa al usuario.
+	 * Si no tiene una cuenta bancaria asociada, permite al usuario introducir un nuevo IBAN,
+	 * verifica si el IBAN es correcto y no está ya en la base de datos, y luego actualiza
+	 * la información del cliente con la nueva cuenta bancaria.
+	 * </p>
+	 * 
+	 * @param dni El DNI del cliente a buscar.
+	 * @throws Exception
+	 */
 	public static void asignarCuentaB(String dni) throws Exception {
 		try(Conexion conex = new Conexion();
-			PreparedStatement pstmt = conex.getConn().prepareStatement("SELECT * FROM cliente WHERE fecha_nacimiento = ? ")) {
+			PreparedStatement pstmt = conex.getConn().prepareStatement("SELECT * FROM cliente WHERE dni = ? ")) {
 			pstmt.setString(1, dni);
 			try (ResultSet salida = pstmt.executeQuery()) {
 				if (salida.next()) {
 					Cliente cliente = crearCliente(salida);
 					System.out.println(cliente);
-					crearCuentaB(conex,cliente.getDatosBan().getCuentaIban())
+					if(cliente.getDatosBan().getCuentaIban()!=null) {
+						System.out.println("El cliente ya tiene una cuenta asociada");
+					}else {
+						boolean rep = true;
+						String iban = null;
+						while(rep) {
+							iban= Scanners.IntroS("Introduce el nuevo iban");
+							rep = ibanIncorrecto(iban);
+							if(rep) {
+								System.out.println("El iban es incorrecto");
+							}else {
+								if(ibanRep(iban, conex)) {
+									System.out.println("El iban es correcto, pero esta en la base de datos");
+									rep = true;
+								}else {
+									System.out.println("El iban es correcto");
+								}
+							}
+						}						
+						cliente.setDatosBan(crearCuentaB(cliente.getNombre(),cliente.getApellidos(),cliente.getDni(),iban));
+						introducirCuenta(conex,cliente);
+						System.out.println("Cliente y cuenta banxcaria actualizados correctamente");
+					}
 				} else {
 					System.out.println("DNI no encontrado en la base de datos");
 				}
@@ -121,7 +165,7 @@ public class Gestion_Clientes {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Da los datos de todos los cliente que hay en la base de datos
 	 * <p>
@@ -279,10 +323,74 @@ public class Gestion_Clientes {
 		return cliente;
 	}
 
-	private static Cuenta_Bancaria crearCuentaB(Conexion conex, String cuentaBancaria) {
-		Cuenta_Bancaria cuentaB;
-		
+	private static Cuenta_Bancaria crearCuentaB(String nombre,String apellido,String dni, String iban) {
+		String banco = Scanners.IntroS("Banco al que pertenece la cuenta bancaria");
+		String provincia = Scanners.IntroS("Provincia a la que pertenece el banco");
+		Cuenta_Bancaria cuentaB = new Cuenta_Bancaria(nombre, apellido, dni, banco, iban, provincia);		
 		return cuentaB;
 	}
 	
+	/**
+	 * Comprueba la longitud del iban y el formato para determinar si es correcto
+	 * @param iban
+	 * @return <b>true</b> si el iban es incorrecto <br>
+	 * 			<b>false</b> si el iban es correcto
+	 */
+	private static boolean ibanIncorrecto(String iban) {
+		boolean incorrecto;
+	    if (iban == null || iban.length() != 24) {
+	    	incorrecto = true;
+	    }else {
+	    	incorrecto = !iban.matches("ES\\d{22}");
+	    }
+	    return incorrecto;
+	}
+	
+	/**
+	 * Comprueba si el iban esta en la base de datos
+	 * @param iban
+	 * @param conex 
+	 * @return <b>true</b> si el iban esta en la base de datos <br>
+	 *         <b>false</b> si el iban no esta en la base de datos
+	 * @throws SQLException
+	 */
+	private static boolean ibanRep(String iban, Conexion conex) throws SQLException {
+	    boolean rep = false;
+	    String query = "SELECT * FROM cuentabancaria WHERE cuenta_iban = ?";
+	    
+	    try (PreparedStatement pstmt = conex.getConn().prepareStatement(query)) {
+	        pstmt.setString(1, iban);
+	        
+	        try (ResultSet salida = pstmt.executeQuery()) {
+	            if (salida.next()) {
+	                rep = true;
+	            }
+	        }
+	    }
+	    
+	    return rep;
+	}
+	
+	private static void introducirCuenta(Conexion conex,Cliente cliente) throws SQLException {
+	    try (PreparedStatement pstmt1 = conex.getConn().prepareStatement(
+	            "INSERT INTO cuentabancaria (cuenta_iban, titular, entidad, provincia) VALUES (?, ?, ?, ?)")) {
+	        
+	        pstmt1.setString(1, cliente.getDatosBan().getCuentaIban());
+	        pstmt1.setString(2, cliente.getDatosBan().getTitular());
+	        pstmt1.setString(3, cliente.getDatosBan().getBanco());
+	        pstmt1.setString(4, cliente.getDatosBan().getProvincia());
+	        
+	        pstmt1.executeUpdate();
+	    }
+
+	    try (PreparedStatement pstmt2 = conex.getConn().prepareStatement(
+	            "UPDATE cliente SET cuenta_bancaria = ? WHERE dni = ?")) {
+	        
+	        pstmt2.setString(1, cliente.getDatosBan().getCuentaIban());
+	        pstmt2.setString(2, cliente.getDni());
+	        
+	        pstmt2.executeUpdate();
+	    }
+	}
+
 }
