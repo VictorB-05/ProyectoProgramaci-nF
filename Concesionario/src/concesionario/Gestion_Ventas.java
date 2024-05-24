@@ -1,5 +1,9 @@
 package concesionario;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Gestion_Ventas {
 	
 	public static void menu() {
@@ -27,8 +31,8 @@ public class Gestion_Ventas {
 	                    realizarVenta();
 	                    break;
 	                case 2:
-	                    int year = Scanners.IntroI("Introduce el año a consultar: ");
-	                    consultarVentasPorAno(year);
+	                    int anyo = Scanners.IntroI("Introduce el año a consultar: ");
+	                    consultarVentasAnyo(anyo);
 	                    break;
 	                case 3:
 	                    System.out.println("Introduce el nombre del vendedor: ");
@@ -58,11 +62,30 @@ public class Gestion_Ventas {
 	    } while (opcion != 6);
 	}
 
-	public static void realizarVenta() {
-	    // Implementar lógica para realizar una venta
+	public static void realizarVenta()throws Exception {
+		try (Conexion conex = new Conexion()) {
+			// Si el cliente es menor de edad, se necesita un representante
+			String dniCliente = Scanners.IntroS("Introduce el DNI del representante: ");
+
+			// Buscar el representante en la base de datos
+			try (PreparedStatement pstmtRep = conex.getConn().prepareStatement("SELECT * FROM cliente WHERE dni = ?")) {
+				pstmtRep.setString(1, dniCliente);
+				try (ResultSet resultadoRep = pstmtRep.executeQuery()) {
+					if (resultadoRep.next()) {
+						// Representante encontrado
+						Cliente cliente = Gestion_Clientes.crearCliente(resultadoRep); // Método para crear un cliente desde
+					} else {
+						// Representante no encontrado
+						System.out.println("El cliente no existe en la base de datos.");
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public static void consultarVentasPorAno(int year) {
+	public static void consultarVentasAnyo(int anyo) {
 	    // Implementar lógica para consultar las ventas del año dado
 	}
 

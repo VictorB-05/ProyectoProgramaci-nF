@@ -42,7 +42,7 @@ public class Gestion_Clientes {
 				case 3:
 					System.out.println("Introduce el dni: ");
 					dni = Scanners.String.nextLine();
-					modificarDatos(dni);
+					modificarDatosCliente(dni);
 					break;
 				case 4:
 					System.out.println("Introduce eL dni: ");
@@ -193,140 +193,179 @@ public class Gestion_Clientes {
 	}
 	
 	/**
-	 * Permite modificar los datos de un cliente en la base de datos, excepto el IBAN y el DNI.
-	 * <p>
-	 * Este método muestra un menú interactivo para que el usuario seleccione el dato que desea cambiar.
-	 * Una vez seleccionado, se solicita el nuevo valor y se actualiza en la base de datos.
-	 * </p>
+	 * Esta clase modifica los datos de un cliente en la base de datos usando su ID
+	 * proporcionado por el usuario para mantener la integridad de la base de datos.
+	 * Se usa un PreparedStatement. Buscamos el cliente por ID, si no existe se notifica al usuario.
+	 * Si existe, se muestran las opciones de atributos a cambiar.
+	 * Cada vez que se elige una opción se actualiza tanto en el objeto cliente como en la base de datos.
+	 * La conexión se maneja a través de la clase Conexion que implementa AutoCloseable,
+	 * lo que permite su uso en un try-with-resources para gestión automática de recursos.
 	 * 
-	 * @param dni El DNI del cliente cuyos datos se desean modificar.
+	 * @param clienteID El ID del cliente a modificar
 	 * @throws Exception 
 	 */
-	public static void modificarDatos(String dni) throws Exception {
+	public static void modificarDatosCliente(String dni) throws Exception {
 	    try (Conexion conex = new Conexion();
 	         PreparedStatement pstmt = conex.getConn().prepareStatement("SELECT * FROM cliente WHERE dni = ?")) {
-
 	        pstmt.setString(1, dni);
 
 	        try (ResultSet rs = pstmt.executeQuery()) {
 	            if (rs.next()) {
-	                Cliente cliente = crearCliente(rs);
-	                System.out.println("Cliente encontrado: " + cliente.getNombre() + " " + cliente.getApellidos() + " con el DNI " + cliente.getDni());
+	                Cliente cliente = crearCliente(rs); // Método que convierte ResultSet a objeto Cliente
+	                System.out.println("Cliente encontrado, opciones a actualizar:");
+	                System.out.println("1. Nombre --------------- " + cliente.getNombre());
+	                System.out.println("2. Apellidos ------------ " + cliente.getApellidos());
+	                System.out.println("3. Fecha de Nacimiento -- " + cliente.getFechaNac());
+	                System.out.println("4. Sexo ----------------- " + cliente.getSexo());
+	                System.out.println("5. Dirección ------------ " + cliente.getDireccion());
+	                System.out.println("6. Localidad ------------ " + cliente.getLocalidad());
+	                System.out.println("7. Provincia ------------ " + cliente.getProvincia());
+	                System.out.println("8. Código Postal -------- " + cliente.getCodPostal());
+	                System.out.println("9. Teléfono ------------- " + cliente.getTelefono());
+	                System.out.println("10. Correo Electrónico -- " + cliente.getCorreoElec());
+	                if(cliente.getRepresentante()!=null) {
+		                System.out.println("11. Representante ------- " + cliente.getRepresentante().getDni());
+	                }else {
+		                System.out.println("11. Representante ------- " + "No hay representante");
+	                }
+	                
+	                int op = Scanners.IntroI("Selecciona el campo que deseas actualizar:");
+	                String updateSQL = null;
 
-	                boolean continuar = true;
+	                switch (op) {
+	                    case 1:
+	                        updateSQL = "UPDATE cliente SET nombre = ? WHERE dni = ?";
+	                        break;
+	                    case 2:
+	                        updateSQL = "UPDATE cliente SET apellidos = ? WHERE dni = ?";
+	                        break;
+	                    case 3:
+	                        updateSQL = "UPDATE cliente SET fecha_nac = ? WHERE dni = ?";
+	                        break;
+	                    case 4:
+	                        updateSQL = "UPDATE cliente SET sexo = ? WHERE dni = ?";
+	                        break;
+	                    case 5:
+	                        updateSQL = "UPDATE cliente SET direccion = ? WHERE dni = ?";
+	                        break;
+	                    case 6:
+	                        updateSQL = "UPDATE cliente SET localidad = ? WHERE dni = ?";
+	                        break;
+	                    case 7:
+	                        updateSQL = "UPDATE cliente SET provincia = ? WHERE dni = ?";
+	                        break;
+	                    case 8:
+	                        updateSQL = "UPDATE cliente SET cod_postal = ? WHERE dni = ?";
+	                        break;
+	                    case 9:
+	                        updateSQL = "UPDATE cliente SET telefono = ? WHERE dni = ?";
+	                        break;
+	                    case 10:
+	                        updateSQL = "UPDATE cliente SET correo_elec = ? WHERE dni = ?";
+	                        break;
+	                    case 11:
+	                        updateSQL = "UPDATE cliente SET representante = ? WHERE dni = ?";
+	                        break;
+	                    default:
+	                        System.out.println("Opción no válida");
+	                        return;
+	                }
 
-	                while (continuar) {
-	                    System.out.println("Seleccione el dato que desea modificar:");
-	                    System.out.println("1. Nombre: " + cliente.getNombre());
-	                    System.out.println("2. Apellidos: " + cliente.getApellidos());
-	                    System.out.println("3. Fecha de Nacimiento: " + cliente.getFechaNac());
-	                    System.out.println("4. Edad: " + cliente.getEdad());
-	                    System.out.println("5. Sexo: " + cliente.getSexo());
-	                    System.out.println("6. Dirección: " + cliente.getDireccion());
-	                    System.out.println("7. Localidad: " + cliente.getLocalidad());
-	                    System.out.println("8. Provincia: " + cliente.getProvincia());
-	                    System.out.println("9. Código Postal: " + cliente.getCodPostal());
-	                    System.out.println("10. Teléfono: " + cliente.getTelefono());
-	                    System.out.println("11. Correo Electrónico: " + cliente.getCorreoElec());
-	                    System.out.println("12. Salir");
-
-	                    int opcion = Scanners.IntroI("Seleccione una opción: ");
-	                    String nuevoValor;
-	                    int nuevoValorI;
-	                    LocalDate nuevaFecha;
-
-	                    switch (opcion) {
+	                try (PreparedStatement updateStmt = conex.getConn().prepareStatement(updateSQL)) {
+	                    switch (op) {
 	                        case 1:
-	                            nuevoValor = Scanners.IntroS("Introduce el nuevo nombre: ");
-	                            cliente.setNombre(nuevoValor);
-	                            actualizarDato(conex, dni, "nombre", nuevoValor);
+	                            String Nombre = Scanners.IntroS("Ingrese nuevo nombre:");
+	                            updateStmt.setString(1, Nombre);
+	                            cliente.setNombre(Nombre);
 	                            break;
 	                        case 2:
-	                            nuevoValor = Scanners.IntroS("Introduce los nuevos apellidos: ");
-	                            cliente.setApellidos(nuevoValor);
-	                            actualizarDato(conex, dni, "apellidos", nuevoValor);
+	                            String Apellidos = Scanners.IntroS("Ingrese nuevos apellidos:");
+	                            updateStmt.setString(1, Apellidos);
+	                            cliente.setApellidos(Apellidos);
 	                            break;
 	                        case 3:
-	                            nuevaFecha = Scanners.IntroFecha("Introduce la nueva fecha de nacimiento (yyyy-mm-dd): ");
-	                            cliente.setFechaNac(nuevaFecha);
-	                            actualizarDato(conex, dni, "fecha_nacimiento", nuevaFecha.toString());
+	                            LocalDate FechaNac = Scanners.IntroFecha("Ingrese nueva fecha de nacimiento (YYYY-MM-DD):");
+	                            updateStmt.setString(1, FechaNac.toString());
+	                            cliente.setFechaNac(FechaNac);
 	                            break;
 	                        case 4:
-	                            System.out.println("Actualizando edad");
-	                            cliente.setEdad();
-	                            actualizarDato(conex, dni, "edad", cliente.getEdad());
+	                            String Sexo = Scanners.IntroS("Ingrese nuevo sexo (H/M):");
+	                            updateStmt.setString(1, Sexo);
+	                            cliente.setSexo(Sexo.charAt(0));
 	                            break;
 	                        case 5:
-	                            nuevoValor = Scanners.IntroS("Introduce el nuevo sexo (M/F): ");
-	                            cliente.setSexo(nuevoValor.charAt(0));
-	                            actualizarDato(conex, dni, "sexo", nuevoValor);
+	                            String Direccion = Scanners.IntroS("Ingrese nueva dirección:");
+	                            updateStmt.setString(1, Direccion);
+	                            cliente.setDireccion(Direccion);
 	                            break;
 	                        case 6:
-	                            nuevoValor = Scanners.IntroS("Introduce la nueva dirección: ");
-	                            cliente.setDireccion(nuevoValor);
-	                            actualizarDato(conex, dni, "direccion", nuevoValor);
+	                            String Localidad = Scanners.IntroS("Ingrese nueva localidad:");
+	                            updateStmt.setString(1, Localidad);
+	                            cliente.setLocalidad(Localidad);
 	                            break;
 	                        case 7:
-	                            nuevoValor = Scanners.IntroS("Introduce la nueva localidad: ");
-	                            cliente.setLocalidad(nuevoValor);
-	                            actualizarDato(conex, dni, "localidad", nuevoValor);
+	                            String Provincia = Scanners.IntroS("Ingrese nueva provincia:");
+	                            updateStmt.setString(1, Provincia);
+	                            cliente.setProvincia(Provincia);
 	                            break;
 	                        case 8:
-	                            nuevoValor = Scanners.IntroS("Introduce la nueva provincia: ");
-	                            cliente.setProvincia(nuevoValor);
-	                            actualizarDato(conex, dni, "provincia", nuevoValor);
+	                            int CodPostal = Scanners.IntroI("Ingrese nuevo código postal:");
+	                            updateStmt.setInt(1, CodPostal);
+	                            cliente.setCodPostal(CodPostal);
 	                            break;
 	                        case 9:
-	                            nuevoValorI = Scanners.IntroI("Introduce el nuevo código postal: ");
-	                            cliente.setCodPostal(nuevoValorI);
-	                            actualizarDato(conex, dni, "cod_postal", nuevoValorI);
+	                            String Telefono = Scanners.IntroS("Ingrese nuevo teléfono:");
+	                            updateStmt.setString(1, Telefono);
+	                            cliente.setTelefono(Telefono);
 	                            break;
 	                        case 10:
-	                            nuevoValor = Scanners.IntroS("Introduce el nuevo teléfono: ");
-	                            cliente.setTelefono(nuevoValor);
-	                            actualizarDato(conex, dni, "telefono", nuevoValor);
+	                            String Correo = Scanners.IntroS("Ingrese nuevo correo electrónico:");
+	                            updateStmt.setString(1, Correo);
 	                            break;
 	                        case 11:
-	                            nuevoValor = Scanners.IntroS("Introduce el nuevo correo electrónico: ");
-	                            cliente.setCorreoElec(nuevoValor);
-	                            actualizarDato(conex, dni, "correo_e", nuevoValor);
+	                        	if(!cliente.getMayorEdad()) {
+	                        		// Si el cliente es menor de edad, se necesita un representante
+	                        		String representanteDni = Scanners.IntroS("Introduce el DNI del representante: ");
+	                	            
+	                	            // Buscar el representante en la base de datos
+	                	            try (PreparedStatement pstmtRep = conex.getConn().prepareStatement("SELECT * FROM cliente WHERE dni = ?")) {
+	                	                pstmtRep.setString(1, representanteDni);
+	                	                try (ResultSet resultadoRep = pstmtRep.executeQuery()) {
+	                	                    if (resultadoRep.next()) {
+	                	                        // Representante encontrado
+	                	                        Cliente representante = crearCliente(resultadoRep); // Método para crear un cliente desde ResultSet
+	        		                            cliente.setRepresentante(representante);
+	        	                        		pstmt.setString(1, cliente.getRepresentante().getDni());
+	                	                    } else {
+	                	                        // Representante no encontrado
+	                	                        System.out.println("El representante no existe en la base de datos.");
+	                	                    }
+	                	                }
+	                	            }
+	                        	}else {
+	                        		System.out.println("Los mayores de edad no pueden tener representante");
+	                        		pstmt.setString(1, null);
+	                        	} 
 	                            break;
-	                        case 12:
-	                            continuar = false;
-	                            System.out.println("Saliendo de la modificación de datos.");
-	                            break;
-	                        default:
-	                            System.out.println("Opción no válida. Intente nuevamente.");
+	                    }
+	                    updateStmt.setString(2, dni); // set de ID para el where del update
+
+	                    String opcion = Scanners.IntroS("¿Quieres actualizar este cliente? (SI/NO):");
+	                    if (opcion.equalsIgnoreCase("SI")) {
+	                        int affectedRows = updateStmt.executeUpdate();
+	                        if (affectedRows > 0) {
+	                            System.out.println("El cliente se ha actualizado correctamente.");
+	                        } else {
+	                            System.out.println("Hubo un problema al actualizar el cliente.");
+	                        }
+	                    } else {
+	                        System.out.println("Actualización cancelada.");
 	                    }
 	                }
 	            } else {
-	                System.out.println("DNI no encontrado en la base de datos.");
+	                System.out.println("Cliente no encontrado en la base de datos.");
 	            }
 	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
-
-	private static void actualizarDato(Conexion conex, String dni, String campo, String nuevoValor) {
-	    String sql = "UPDATE cliente SET " + campo + " = ? WHERE dni = ?";
-	    try (PreparedStatement pstmt = conex.getConn().prepareStatement(sql)) {
-	        pstmt.setString(1, nuevoValor);
-	        pstmt.setString(2, dni);
-	        pstmt.executeUpdate();
-	        System.out.println("Dato actualizado correctamente.");
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
-	
-	private static void actualizarDato(Conexion conex, String dni, String campo, int nuevoValor) {
-	    String sql = "UPDATE cliente SET " + campo + " = ? WHERE dni = ?";
-	    try (PreparedStatement pstmt = conex.getConn().prepareStatement(sql)) {
-	        pstmt.setInt(1, nuevoValor);
-	        pstmt.setString(2, dni);
-	        pstmt.executeUpdate();
-	        System.out.println("Dato actualizado correctamente.");
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
