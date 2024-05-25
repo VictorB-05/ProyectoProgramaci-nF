@@ -1,5 +1,5 @@
 package concesionario;
 
-public enum TipoVenta {
+public enum Tipo_Venta {
 	Nuevo, Seminuevo, Usado, Demo, Otro
 }

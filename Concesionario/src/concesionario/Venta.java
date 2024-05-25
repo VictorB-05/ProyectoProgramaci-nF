@@ -6,18 +6,18 @@ public class Venta implements IVenta{
 	private Vehiculo vehiculo;
 	private Cliente cliente;
 	private Vendedor vendedor;
-	private TipoOperacion tOperacion;
+	private Tipo_Operacion tOperacion;
 	private LocalDate fecha;
-	private TipoVehiculo tVehiculo;
+	private Tipo_Venta tVenta;
 	
-	public Venta(Vehiculo vehiculo, Cliente cliente, Vendedor vendedor, TipoOperacion tOperacion, LocalDate fecha,
-			TipoVehiculo tVehiculo) {
+	public Venta(Vehiculo vehiculo, Cliente cliente, Vendedor vendedor, Tipo_Operacion tOperacion, LocalDate fecha,
+			Tipo_Venta tVenta) {
 		this.vehiculo = vehiculo;
 		this.cliente = cliente;
 		this.vendedor = vendedor;
 		this.tOperacion = tOperacion;
 		this.fecha = fecha;
-		this.tVehiculo = tVehiculo;
+		this.tVenta = tVenta;
 	}
 
 	public Vehiculo getVehiculo() {
@@ -44,14 +44,6 @@ public class Venta implements IVenta{
 		this.vendedor = vendedor;
 	}
 
-	public TipoOperacion gettOperacion() {
-		return tOperacion;
-	}
-
-	public void settOperacion(TipoOperacion tOperacion) {
-		this.tOperacion = tOperacion;
-	}
-
 	public LocalDate getFecha() {
 		return fecha;
 	}
@@ -60,15 +52,20 @@ public class Venta implements IVenta{
 		this.fecha = fecha;
 	}
 
-	public TipoVehiculo gettVehiculo() {
-		return tVehiculo;
+	public Tipo_Venta gettVenta() {
+		return tVenta;
 	}
 
-	public void settVehiculo(TipoVehiculo tVehiculo) {
-		this.tVehiculo = tVehiculo;
+	public void settVenta(Tipo_Venta tVenta) {
+		this.tVenta = tVenta;
 	}
 
-	
-	
-	
+	public void settOperacion(Tipo_Operacion tOperacion) {
+		this.tOperacion = tOperacion;
+	}
+
+	public Tipo_Operacion gettOperacion() {
+		return tOperacion;
+	}
+
 }

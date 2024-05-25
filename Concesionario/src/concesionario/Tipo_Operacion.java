@@ -1,5 +1,5 @@
 package concesionario;
 
-public enum TipoOperacion {
+public enum Tipo_Operacion {
 	Venta, Renting, Leasing, Alquiler, Otro
 }

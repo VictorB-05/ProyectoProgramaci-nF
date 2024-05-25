@@ -8,7 +8,7 @@ public class Vehiculo implements IVehiculo{
     private String marca;
     private String modelo;
     private int anyoProduc;
-    private TipoVehiculo tipo;
+    private Tipo_Vehiculo tipo;
     private Motorizacion motor;
     private int potencia;
     private double tamDeposit;
@@ -16,11 +16,11 @@ public class Vehiculo implements IVehiculo{
     private double consumo;
     private LocalDate fechaMatricula;
     private String nive;
-    private EtiquetaEco etiquetaEco;
+    private Etiqueta_Eco etiquetaEco;
     
 	public Vehiculo(String matricula, String numeroBastidor, String marca, String modelo, int anyoProduc,
-			TipoVehiculo tipo, Motorizacion motor, int potencia, double tamDeposit, int numPuertas, double consumo,
-			LocalDate fechaMatricula, String nive, EtiquetaEco etiquetaEco) {
+			Tipo_Vehiculo tipo, Motorizacion motor, int potencia, double tamDeposit, int numPuertas, double consumo,
+			LocalDate fechaMatricula, String nive, Etiqueta_Eco etiquetaEco) {
 		this.matricula = matricula;
 		this.numeroBastidor = numeroBastidor;
 		this.marca = marca;
@@ -96,21 +96,21 @@ public class Vehiculo implements IVehiculo{
 		this.anyoProduc = anyoProduc;
 	}
 
-	public TipoVehiculo getTipo() {
+	public Tipo_Vehiculo getTipo() {
 		return tipo;
 	}
 
-	public void setTipo(TipoVehiculo tipo) {
+	public void setTipo(Tipo_Vehiculo tipo) {
 		this.tipo = tipo;
 	}
 	
 	public void setTipo(String tipo) {
 		try {
 			// Se intorduce el string en el enum con valueOf
-			this.tipo = TipoVehiculo.valueOf(tipo);
+			this.tipo = Tipo_Vehiculo.valueOf(tipo);
 		}catch (IllegalArgumentException e) {
 			// Si hay algún error se pone un valor por defecto
-			this.tipo = TipoVehiculo.Otros;
+			this.tipo = Tipo_Vehiculo.Otros;
 		}
 	}
 	
@@ -180,34 +180,34 @@ public class Vehiculo implements IVehiculo{
 		this.nive = nive;
 	}
 
-	public EtiquetaEco getEtiquetaEco() {
+	public Etiqueta_Eco getEtiquetaEco() {
 		return etiquetaEco;
 	}
 
-	public void setEtiquetaEco(EtiquetaEco etiquetaEco) {
+	public void setEtiquetaEco(Etiqueta_Eco etiquetaEco) {
 		this.etiquetaEco = etiquetaEco;
 	}
 	
 	public void setEtiquetaEco(String etiquetaEco) {
 		if(etiquetaEco.equals("0")) {
-			this.etiquetaEco = EtiquetaEco.CERO;
+			this.etiquetaEco = Etiqueta_Eco.CERO;
 		}else {
 			/* No funciona no entiendo el motivo 
 			try {
 				// Se intorduce el string en el enum con valueOf
-				EtiquetaEco.valueOf(etiquetaEco);
+				Etiqueta_Eco.valueOf(etiquetaEco);
 			}catch (IllegalArgumentException e) {
 				// Si hay algún error se pone un valor por defecto
-				this.etiquetaEco = EtiquetaEco.C;
+				this.etiquetaEco = Etiqueta_Eco.C;
 			}*/
 			if(etiquetaEco.equals("ECO")) {
-				this.etiquetaEco = EtiquetaEco.ECO;
+				this.etiquetaEco = Etiqueta_Eco.ECO;
 			}else if (etiquetaEco.equals("C")) {
-				this.etiquetaEco = EtiquetaEco.C;
+				this.etiquetaEco = Etiqueta_Eco.C;
 			}else if (etiquetaEco.equals("B")) {
-				this.etiquetaEco = EtiquetaEco.B;
+				this.etiquetaEco = Etiqueta_Eco.B;
 			}else if (etiquetaEco.equals("A")) {
-				this.etiquetaEco = EtiquetaEco.A;
+				this.etiquetaEco = Etiqueta_Eco.A;
 			}
 		}
 	}

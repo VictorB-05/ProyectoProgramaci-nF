@@ -1,5 +1,5 @@
 package concesionario;
 
-public enum TipoVehiculo {
+public enum Tipo_Vehiculo {
 	Automovil,Motocicleta,Ciclomotor,Furgoneta,Camion,Otros
 }

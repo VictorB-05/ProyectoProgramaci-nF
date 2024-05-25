@@ -1,6 +1,6 @@
 package concesionario;
 
-public enum EtiquetaEco {
+public enum Etiqueta_Eco {
 	ECO, C, B, A,CERO;
 	
 	@Override

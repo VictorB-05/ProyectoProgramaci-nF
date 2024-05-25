@@ -88,7 +88,7 @@ public class Gestion_Vehiculos {
 
 		int anyoProduc = Scanners.IntroI("Ingrese el año de producción: ");
 
-		TipoVehiculo tipo = leerTipoVehiculo();
+		Tipo_Vehiculo tipo = leerTipoVehiculo();
 		Motorizacion motor = leerMotorizacion();
 
 		int potencia = Scanners.IntroI("Ingrese la potencia: ");
@@ -114,7 +114,7 @@ public class Gestion_Vehiculos {
 
 		String nive = Scanners.IntroS("Ingrese el NIVE: ");
 
-		EtiquetaEco etiquetaEco = leerEtiquetaEco();
+		Etiqueta_Eco etiquetaEco = leerEtiquetaEco();
 
 		Vehiculo vehiculo = new Vehiculo(matricula, numeroBastidor, marca, modelo, anyoProduc, tipo, motor, potencia,
 				tamDeposit, numPuertas, consumo, fechaMatricula, nive, etiquetaEco);
@@ -344,7 +344,7 @@ public class Gestion_Vehiculos {
 				                updateStmt.setString(1, motor.toString());
 				                break;
 				            case 9:
-				            	TipoVehiculo tipo = leerTipoVehiculo();
+				            	Tipo_Vehiculo tipo = leerTipoVehiculo();
 				                updateStmt.setString(1, tipo.toString());
 				                break;
 				            case 10:
@@ -361,7 +361,7 @@ public class Gestion_Vehiculos {
 				                updateStmt.setString(1, nuevoNive);
 				                break;
 				            case 13:
-				            	EtiquetaEco eco = leerEtiquetaEco();
+				            	Etiqueta_Eco eco = leerEtiquetaEco();
 				                updateStmt.setString(1, eco.toString());
 				                break;
 				            }
@@ -453,24 +453,24 @@ public class Gestion_Vehiculos {
 	}
 
 	/**
-	 * Metodo el cual muestra todas las opciones del enum TipoVehiculo y las enumera
+	 * Metodo el cual muestra todas las opciones del enum Tipo_Vehiculo y las enumera
 	 * cuando se introduzca el numero correspondiente a un valor se asignara ese
 	 * valor
 	 * 
 	 * @return el enum correspondiente al numero marcado
 	 * @see IntroI
 	 */
-	private static TipoVehiculo leerTipoVehiculo() {
+	private static Tipo_Vehiculo leerTipoVehiculo() {
 		int opcion;
 		do {
 			String mensaje = "Seleccione el tipo de vehículo:\n";
-			for (int i = 0; i < TipoVehiculo.values().length; i++) {
-				mensaje += (i + 1) + ". " + TipoVehiculo.values()[i]+"\n";
+			for (int i = 0; i < Tipo_Vehiculo.values().length; i++) {
+				mensaje += (i + 1) + ". " + Tipo_Vehiculo.values()[i]+"\n";
 			}
 			opcion = Scanners.IntroI(mensaje);
 			opcion--;
-		} while (opcion > EtiquetaEco.values().length);
-		return TipoVehiculo.values()[opcion];
+		} while (opcion > Tipo_Vehiculo.values().length);
+		return Tipo_Vehiculo.values()[opcion];
 	}
 
 	/**
@@ -490,29 +490,29 @@ public class Gestion_Vehiculos {
 			}
 			opcion = Scanners.IntroI(mensaje);
 			opcion--;
-		} while (opcion > EtiquetaEco.values().length);
+		} while (opcion > Motorizacion.values().length);
 		return Motorizacion.values()[opcion - 1];
 	}
 
 	/**
-	 * Metodo el cual muestra todas las opciones del enum EtiquetaEco y las enumera
+	 * Metodo el cual muestra todas las opciones del enum Etiqueta_Eco y las enumera
 	 * cuando se introduzca el numero correspondiente a un valor se asignara ese
 	 * valor
 	 * 
 	 * @return el enum correspondiente al numero marcado
 	 * @see IntroI
 	 */
-	private static EtiquetaEco leerEtiquetaEco() {
+	private static Etiqueta_Eco leerEtiquetaEco() {
 		int opcion;
 		do {
 			String mensaje = "Seleccione la etiqueta ecológica:\n";
-			for (int i = 0; i < EtiquetaEco.values().length; i++) {
-				mensaje += (i + 1) + ". " + EtiquetaEco.values()[i]+"\n";
+			for (int i = 0; i < Etiqueta_Eco.values().length; i++) {
+				mensaje += (i + 1) + ". " + Etiqueta_Eco.values()[i]+"\n";
 			}
 			opcion = Scanners.IntroI(mensaje);
 			opcion--;
-		} while (opcion > EtiquetaEco.values().length);
-		return EtiquetaEco.values()[opcion];
+		} while (opcion > Etiqueta_Eco.values().length);
+		return Etiqueta_Eco.values()[opcion];
 	}
 
 }
