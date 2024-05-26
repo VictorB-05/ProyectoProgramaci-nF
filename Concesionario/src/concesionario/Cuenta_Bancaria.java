@@ -1,6 +1,8 @@
 package concesionario;
 
-
+/**
+ * Obejeto en el que se gestionan las cuentas bancarias
+ */
 public class Cuenta_Bancaria {
 	private String banco;	
 	private String titular;
@@ -93,6 +95,12 @@ public class Cuenta_Bancaria {
 
 	public void setProvincia(String provincia) {
 		this.provincia = provincia;
+	}
+
+	@Override
+	public String toString() {
+		return " Entidad: " + banco + " titular: " + titular + " cuentaIban: " + cuentaIban
+				+ " provincia: " + provincia;
 	}
 	
 	

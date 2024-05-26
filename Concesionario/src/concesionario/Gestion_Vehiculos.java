@@ -8,8 +8,13 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Clase donde se gestionan los vehiculos
+ */
 public class Gestion_Vehiculos {
-
+	/**
+	 * menu de cada opción
+	 */
 	public static void menu() {
 		int opcion = 6;
 		String matricula;
@@ -458,7 +463,6 @@ public class Gestion_Vehiculos {
 	 * valor
 	 * 
 	 * @return el enum correspondiente al numero marcado
-	 * @see IntroI
 	 */
 	private static Tipo_Vehiculo leerTipoVehiculo() {
 		int opcion;
@@ -479,7 +483,6 @@ public class Gestion_Vehiculos {
 	 * valor
 	 * 
 	 * @return el enum correspondiente al numero marcado
-	 * @see IntroI
 	 */
 	private static Motorizacion leerMotorizacion() {
 		int opcion;
@@ -500,7 +503,6 @@ public class Gestion_Vehiculos {
 	 * valor
 	 * 
 	 * @return el enum correspondiente al numero marcado
-	 * @see IntroI
 	 */
 	private static Etiqueta_Eco leerEtiquetaEco() {
 		int opcion;

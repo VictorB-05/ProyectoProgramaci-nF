@@ -1,7 +1,9 @@
 package concesionario;
 
 import java.time.LocalDate;
-
+/**
+ * objeto para gestionar los datos personales
+ */
 public class Persona implements IPersona {
 	private String nombre;
 	private String apellidos;
@@ -16,6 +18,21 @@ public class Persona implements IPersona {
 	private String telefono;
 	private String correoElec;
 
+	/**
+	 * Constructor al que le llega la edad
+	 * @param nombre
+	 * @param apellidos
+	 * @param dni
+	 * @param fechaNac
+	 * @param edad
+	 * @param sexo
+	 * @param direccion
+	 * @param localidad
+	 * @param provincia
+	 * @param codPostal
+	 * @param telefono
+	 * @param correoElec
+	 */
 	public Persona(String nombre, String apellidos, String dni, LocalDate fechaNac, int edad, char sexo,
 			String direccion, String localidad, String provincia, int codPostal, String telefono, String correoElec) {
 		this.nombre = nombre;
@@ -32,6 +49,20 @@ public class Persona implements IPersona {
 		this.correoElec = correoElec;
 	}
 	
+	/**
+	 * Constructor que calcula la edad
+	 * @param nombre
+	 * @param apellidos
+	 * @param dni
+	 * @param fechaNac
+	 * @param sexo
+	 * @param direccion
+	 * @param localidad
+	 * @param provincia
+	 * @param codPostal
+	 * @param telefono
+	 * @param correoElec
+	 */
 	public Persona(String nombre, String apellidos, String dni, LocalDate fechaNac, char sexo, String direccion,
 			String localidad, String provincia, int codPostal, String telefono, String correoElec) {
 		this.nombre = nombre;

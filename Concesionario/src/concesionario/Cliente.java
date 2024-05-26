@@ -2,6 +2,9 @@ package concesionario;
 
 import java.time.LocalDate;
 
+/**
+ * Objeto gestiona los clientes de la base de datos
+ */
 public class Cliente extends Persona implements ICliente{
 	private Cuenta_Bancaria datosBan;
 	private LocalDate fAlta;

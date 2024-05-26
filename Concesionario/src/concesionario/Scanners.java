@@ -5,6 +5,9 @@ import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Clase donde hay metodos que facilitan la inserción de datos del usuario y su comprobación
+ */
 public class Scanners {
 	
 	public static Scanner Double = new Scanner(System.in);
@@ -56,6 +59,11 @@ public class Scanners {
 		return num;
 	}
 	
+	/**
+	 * Metodo que tiene un nextLine()
+	 * @param mensaje
+	 * @return String pedidido por el usuario
+	 */
 	public static String IntroS(String mensaje) {
 		String num  = null;
 		boolean rep = false;
@@ -97,6 +105,11 @@ public class Scanners {
 		return fecha;
 	}
 	
+	/**
+	 * Metodo que piede al usuariio meter una fecha que debe ser correcta en caso de no serlo se la volvera a pedir
+	 * @param mensaje
+	 * @return Fecha en LocalDate
+	 */
 	public static LocalDate IntroFecha(String mensaje) {
 		LocalDate fecha = null;
 		String fechaS;

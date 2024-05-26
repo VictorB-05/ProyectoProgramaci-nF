@@ -6,15 +6,21 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 
+/**
+ * Clase donde se gestionan los clientes
+ */
 public class Gestion_Clientes {
 
+	/**
+	 * Menu en el cual se gestionan todas las acciones de Clientes
+	 */
 	public static void menu() {
 		int opcion = 6;
 		String dni;
 		do {
 			try {
 				// Mostrar el menú
-				System.out.println("\tGestion Vehiculos:");
+				System.out.println("\tGestion Clientes:");
 				System.out.println("-------------------------------------------------------");
 				System.out.println("\t1. Alta cliente");
 				System.out.println("\t2. Consulta datos cliente (DNI)");
@@ -201,7 +207,7 @@ public class Gestion_Clientes {
 	 * La conexión se maneja a través de la clase Conexion que implementa AutoCloseable,
 	 * lo que permite su uso en un try-with-resources para gestión automática de recursos.
 	 * 
-	 * @param clienteID El ID del cliente a modificar
+	 * @param dni El dni del cliente a modificar
 	 * @throws Exception 
 	 */
 	public static void modificarDatosCliente(String dni) throws Exception {
@@ -431,7 +437,6 @@ public class Gestion_Clientes {
 	 * lo que la hace usable en un try-with esto sirve para que el programador no
 	 * tenga que preocuparse de que por algún error la conexión no se cierre
 	 * 
-	 * @param dni
 	 * @throws Exception
 	 * @see crearCliente
 	 * @see Cliente
@@ -454,7 +459,6 @@ public class Gestion_Clientes {
 	 * lo que la hace usable en un try-with esto sirve para que el programador no
 	 * tenga que preocuparse de que por algún error la conexión no se cierre
 	 * 
-	 * @param dni
 	 * @throws Exception
 	 * @see crearCliente
 	 * @see Cliente
@@ -478,7 +482,7 @@ public class Gestion_Clientes {
 	 * lo que la hace usable en un try-with esto sirve para que el programador no
 	 * tenga que preocuparse de que por algún error la conexión no se cierre
 	 * 
-	 * @param dni
+	 * @param anyo año en el que se quiere busacar
 	 * @throws Exception
 	 * @see crearCliente
 	 * @see Cliente
@@ -580,14 +584,16 @@ public class Gestion_Clientes {
 
 		return cliente;
 	}
-	/**
-	 * 
-	 * @param nombre
-	 * @param apellido
-	 * @param dni
-	 * @param iban
-	 * @return cuenta bancaria que se ha generado
-	 */
+
+		/**
+		 * Crea una nueva cuenta bancaria solicitando los datos del banco y la provincia al usuario.
+		 * 
+		 * @param nombre el nombre del titular de la cuenta.
+		 * @param apellido el apellido del titular de la cuenta.
+		 * @param dni el DNI del titular de la cuenta.
+		 * @param iban el IBAN de la cuenta.
+		 * @return la cuenta bancaria que se ha generado.
+		 */
 	private static Cuenta_Bancaria crearCuentaB(String nombre,String apellido,String dni, String iban) {
 		String banco = Scanners.IntroS("Banco al que pertenece la cuenta bancaria");
 		String provincia = Scanners.IntroS("Provincia a la que pertenece el banco");
@@ -636,6 +642,12 @@ public class Gestion_Clientes {
 	    return rep;
 	}
 	
+	/**
+	 * Introduce una cuenta bancaria en la base de datos
+	 * @param conex la conexión a la base de datos
+	 * @param cliente el cliente al que se le asigna la cuenta bancaria
+	 * @throws SQLException
+	 */
 	private static void introducirCuenta(Conexion conex,Cliente cliente) throws SQLException {
 	    try (PreparedStatement pstmt1 = conex.getConn().prepareStatement(
 	            "INSERT INTO cuentabancaria (cuenta_iban, titular, entidad, provincia) VALUES (?, ?, ?, ?)")) {

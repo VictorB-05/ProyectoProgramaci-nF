@@ -5,9 +5,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-
+/**
+ * Clase donde se gestionan los vendedores
+ */
 public class Gestion_Vendedores {
 	
+	/**
+	 * menu de cada opción
+	 */
 	public static void menu() {
 	    int opcion = 0;
 	    String dni;

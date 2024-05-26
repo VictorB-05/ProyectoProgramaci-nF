@@ -1,7 +1,9 @@
 package concesionario;
 
 import java.time.LocalDate;
-
+/**
+ * objeto para gestionar los vehiculos
+ */
 public class Vehiculo implements IVehiculo{
 	private String matricula;
     private String numeroBastidor;
@@ -18,6 +20,23 @@ public class Vehiculo implements IVehiculo{
     private String nive;
     private Etiqueta_Eco etiquetaEco;
     
+    /**
+     * Constructor para insertar valores que llegen por teclado
+     * @param matricula
+     * @param numeroBastidor
+     * @param marca
+     * @param modelo
+     * @param anyoProduc
+     * @param tipo
+     * @param motor
+     * @param potencia
+     * @param tamDeposit
+     * @param numPuertas
+     * @param consumo
+     * @param fechaMatricula
+     * @param nive
+     * @param etiquetaEco
+     */
 	public Vehiculo(String matricula, String numeroBastidor, String marca, String modelo, int anyoProduc,
 			Tipo_Vehiculo tipo, Motorizacion motor, int potencia, double tamDeposit, int numPuertas, double consumo,
 			LocalDate fechaMatricula, String nive, Etiqueta_Eco etiquetaEco) {
@@ -37,6 +56,23 @@ public class Vehiculo implements IVehiculo{
 		this.etiquetaEco = etiquetaEco;
 	}
 
+	/**
+	 * Constructor de valores desde la base de datos
+	 * @param matricula
+	 * @param numeroBastidor
+	 * @param marca
+	 * @param modelo
+	 * @param anyoProduc
+	 * @param motor
+	 * @param tipo_vehiculo
+	 * @param potencia
+	 * @param tamDeposit
+	 * @param numPuertas
+	 * @param consumo
+	 * @param fechaMatricula
+	 * @param nive
+	 * @param etiquetaEco
+	 */
 	public Vehiculo(String matricula, String numeroBastidor, String marca, String modelo, int anyoProduc,
 			String motor, String tipo_vehiculo, int potencia, double tamDeposit, int numPuertas, double consumo,
 			LocalDate fechaMatricula, String nive, String etiquetaEco) {
@@ -54,6 +90,10 @@ public class Vehiculo implements IVehiculo{
 		this.fechaMatricula = fechaMatricula;
 		this.nive = nive;
 		setEtiquetaEco(etiquetaEco);
+	}
+	
+	public Vehiculo(String matricula) {
+		this.matricula = matricula;
 	}
 
 	public String getMatricula() {
@@ -104,6 +144,9 @@ public class Vehiculo implements IVehiculo{
 		this.tipo = tipo;
 	}
 	
+	/**
+	 * Setter de Tipo_Vehiculo por string
+	 */
 	public void setTipo(String tipo) {
 		try {
 			// Se intorduce el string en el enum con valueOf
@@ -122,6 +165,9 @@ public class Vehiculo implements IVehiculo{
 		this.motor = motor;
 	}
 	
+	/**
+	 * Setter de Motorizacion por string
+	 */
 	public void setMotor(String motor) {
 		try {
 			// Se intorduce el string en el enum con valueOf
@@ -188,6 +234,9 @@ public class Vehiculo implements IVehiculo{
 		this.etiquetaEco = etiquetaEco;
 	}
 	
+	/**
+	 * Setter de Etiqueta_Eco por string
+	 */
 	public void setEtiquetaEco(String etiquetaEco) {
 		if(etiquetaEco.equals("0")) {
 			this.etiquetaEco = Etiqueta_Eco.CERO;

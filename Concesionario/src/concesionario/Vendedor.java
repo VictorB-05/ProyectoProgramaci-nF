@@ -2,6 +2,9 @@ package concesionario;
 
 import java.time.LocalDate;
 
+/**
+ * Objeto que gestiona los vendedores
+ */
 public class Vendedor extends Persona implements IVendedor{
 	private String caEmpresa;
 	private String departamento;
@@ -33,6 +36,10 @@ public class Vendedor extends Persona implements IVendedor{
 		this.caEmpresa = caEmpresa;
 		this.departamento = departamento;
 		this.sueldo = sueldo;
+	}
+	
+	public Vendedor(String dni) {
+		super(dni);
 	}
 
 	public String getCaEmpresa() {

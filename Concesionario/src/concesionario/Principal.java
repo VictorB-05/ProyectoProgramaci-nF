@@ -1,7 +1,13 @@
 package concesionario;
-
+/**
+ * Main de la aplicacción
+ */
 public class Principal {
-
+	
+	/**
+	 * Menu principal
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		int opcion = 6;
 		do {
